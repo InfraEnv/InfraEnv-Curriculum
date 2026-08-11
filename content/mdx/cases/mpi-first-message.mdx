@@ -1,0 +1,124 @@
+## Overview
+
+MPI 程序不是“一个程序里开两个线程”，而是启动多个拥有独立地址空间的进程。每个进程拿到一个 Rank，并通过 Communicator 明确交换数据。
+
+## Learning Goals
+
+- 理解 `MPI_COMM_WORLD`、Rank 与 Size。
+- 使用 `MPI_Send` / `MPI_Recv` 传递一条带标签的消息。
+- 通过交换调用顺序识别阻塞通信死锁。
+
+## Prerequisites
+
+- C 语言数组和命令行。
+- 分布式内存与消息传递的基本概念。
+- Linux 或 WSL 环境。
+
+## Environment
+
+安装 Open MPI 或 MPICH，任选一种即可，不要混用头文件与运行时。
+
+```bash
+mpicc --version
+mpirun --version
+```
+
+## Step-by-step Guide
+
+### 1. 编写双 Rank 程序
+
+```c
+// hello_mpi.c
+#include <mpi.h>
+#include <stdio.h>
+#include <string.h>
+
+int main(int argc, char **argv) {
+    MPI_Init(&argc, &argv);
+
+    int rank = -1;
+    int size = 0;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    if (size != 2) {
+        if (rank == 0) fprintf(stderr, "run with exactly 2 ranks\n");
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
+
+    const int tag = 42;
+    if (rank == 0) {
+        char message[] = "hello from rank 0";
+        MPI_Send(message, (int)strlen(message) + 1, MPI_CHAR, 1, tag, MPI_COMM_WORLD);
+        printf("rank 0 sent %zu bytes\n", strlen(message) + 1);
+    } else {
+        char message[64];
+        MPI_Status status;
+        MPI_Recv(message, 64, MPI_CHAR, 0, tag, MPI_COMM_WORLD, &status);
+
+        int count = 0;
+        MPI_Get_count(&status, MPI_CHAR, &count);
+        printf("rank 1 received %d bytes: %s\n", count, message);
+    }
+
+    MPI_Finalize();
+    return 0;
+}
+```
+
+### 2. 使用 MPI Wrapper 编译
+
+```bash
+mpicc -Wall -Wextra -O2 hello_mpi.c -o hello_mpi
+mpirun -np 2 ./hello_mpi
+```
+
+`mpicc` 不是另一种 C 编译器；它会调用系统编译器并补齐 MPI 头文件和链接参数。
+
+### 3. 观察错误的进程数
+
+```bash
+mpirun -np 1 ./hello_mpi
+mpirun -np 3 ./hello_mpi
+```
+
+程序应主动终止，而不是悄悄产生无意义结果。
+
+## Expected Output
+
+输出行的先后顺序不受保证，但内容应类似：
+
+```text
+rank 0 sent 18 bytes
+rank 1 received 18 bytes: hello from rank 0
+```
+
+## Visualization
+
+```text
+MPI_COMM_WORLD (size = 2)
+
+Rank 0                                       Rank 1
+private memory                               private memory
+"hello from rank 0" ── tag 42 / MPI_CHAR ──▶ buffer[64]
+MPI_Send                                     MPI_Recv
+```
+
+通信匹配至少依赖：Communicator、Source、Destination、Tag 和 Datatype。
+
+## Common Errors
+
+| 现象 | 原因 | 处理 |
+| --- | --- | --- |
+| 找不到 `mpi.h` | 直接使用 `gcc` 或 MPI 开发包缺失 | 使用 `mpicc` |
+| 程序一直不退出 | Send/Recv 的源、目标或 Tag 不匹配 | 逐项核对通信包络 |
+| Root 用户运行被拒绝 | Open MPI 的安全策略 | 使用普通用户，不把放宽策略当默认方案 |
+| 多机找不到可执行文件 | 节点环境或路径不一致 | 保证每个节点拥有相同二进制和库 |
+
+## Next Steps
+
+1. 把消息改为整数数组，并核对 `MPI_Datatype`。
+2. 使用 `MPI_Sendrecv` 完成双向交换，避免对称阻塞。
+3. 使用 `MPI_Bcast` 和 `MPI_Reduce` 进入集合通信。
+
+

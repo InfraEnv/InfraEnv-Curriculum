@@ -1,0 +1,140 @@
+## Overview
+
+归约是并行计算中最常见的模式之一：多个线程各自处理一部分输入，最终把局部结果合成一个值。这个实验先故意制造数据竞争，再用 OpenMP 的 `reduction` 恢复正确性。
+
+<Callout title="先正确，再加速">
+如果并行程序更快却偶尔给出错误结果，它仍然是错误程序。请先保留串行基线和误差检查，再讨论速度。
+</Callout>
+
+## Learning Goals
+
+- 观察多个线程写同一变量时的数据竞争。
+- 理解 `reduction(+:sum)` 创建局部累加器的意义。
+- 用 `omp_get_wtime` 比较串行与并行耗时。
+
+## Prerequisites
+
+- C 语言循环与数组。
+- 线程、共享变量和竞态的基本概念。
+- 能够使用 GCC 编译参数。
+
+## Environment
+
+需要支持 OpenMP 的 GCC。Windows 上推荐 WSL；macOS 的 Apple Clang 默认不附带 OpenMP Runtime。
+
+```bash
+gcc --version
+```
+
+## Step-by-step Guide
+
+### 1. 建立串行基线与错误版本
+
+```c
+// reduction.c
+#include <math.h>
+#include <omp.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+static double serial_sum(const double *values, long n) {
+    double sum = 0.0;
+    for (long i = 0; i < n; ++i) sum += values[i];
+    return sum;
+}
+
+static double racy_sum(const double *values, long n) {
+    double sum = 0.0;
+    #pragma omp parallel for
+    for (long i = 0; i < n; ++i) sum += values[i];
+    return sum;
+}
+
+static double parallel_sum(const double *values, long n) {
+    double sum = 0.0;
+    #pragma omp parallel for reduction(+:sum) schedule(static)
+    for (long i = 0; i < n; ++i) sum += values[i];
+    return sum;
+}
+
+int main(void) {
+    const long n = 20000000;
+    double *values = malloc((size_t)n * sizeof(double));
+    if (!values) return 1;
+    for (long i = 0; i < n; ++i) values[i] = 1.0 / (double)(i + 1);
+
+    double start = omp_get_wtime();
+    double serial = serial_sum(values, n);
+    double serial_time = omp_get_wtime() - start;
+
+    double wrong = racy_sum(values, n);
+
+    start = omp_get_wtime();
+    double parallel = parallel_sum(values, n);
+    double parallel_time = omp_get_wtime() - start;
+
+    printf("threads=%d\n", omp_get_max_threads());
+    printf("serial   %.12f  %.4fs\n", serial, serial_time);
+    printf("racy     %.12f  error=%.6e\n", wrong, fabs(serial - wrong));
+    printf("parallel %.12f  %.4fs  speedup=%.2fx\n",
+           parallel, parallel_time, serial_time / parallel_time);
+
+    free(values);
+    return fabs(serial - parallel) < 1e-9 ? 0 : 2;
+}
+```
+
+### 2. 编译并改变线程数
+
+```bash
+gcc -Wall -Wextra -O3 -fopenmp reduction.c -lm -o reduction
+OMP_NUM_THREADS=1 ./reduction
+OMP_NUM_THREADS=2 ./reduction
+OMP_NUM_THREADS=4 ./reduction
+```
+
+### 3. 记录而不是挑选结果
+
+每种线程数至少运行三次，保留中位数。不要把第一次冷启动和后续运行混在一起比较。
+
+## Expected Output
+
+具体时间取决于 CPU，但正确性关系应保持一致：
+
+```text
+threads=4
+serial   17.388458521419  0.0312s
+racy      2.839102...     error=1.454936e+01
+parallel 17.388458521419  0.0108s  speedup=2.89x
+```
+
+## Visualization
+
+```text
+错误版本： T0 ─┐
+           T1 ─┼──▶ shared sum  （读-改-写互相覆盖）
+           T2 ─┤
+           T3 ─┘
+
+reduction：T0 → local0 ─┐
+          T1 → local1 ─┼──▶ final sum
+          T2 → local2 ─┤
+          T3 → local3 ─┘
+```
+
+## Common Errors
+
+| 现象 | 原因 | 处理 |
+| --- | --- | --- |
+| `omp.h: No such file` | 编译器未安装 OpenMP Runtime | 使用支持 OpenMP 的 GCC/LLVM 配置 |
+| `undefined reference to GOMP_*` | 链接时遗漏 `-fopenmp` | 编译和链接都保留该参数 |
+| 加速比小于 1 | 输入太小或受内存带宽限制 | 增大输入并观察 Roofline 约束 |
+| 每次数值最后几位不同 | 浮点加法顺序改变 | 用误差阈值而非逐位相等检查 |
+
+## Next Steps
+
+1. 比较 `schedule(static)` 与 `schedule(dynamic)`。
+2. 将每次迭代改为不均匀工作量，观察负载均衡。
+3. 使用 `perf stat` 比较缓存未命中与内存带宽。
+
+

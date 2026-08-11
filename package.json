@@ -1,0 +1,54 @@
+{
+  "name": "@infraenv/curriculum",
+  "version": "0.1.0-alpha.0",
+  "description": "Versioned, validated curriculum and simulation scenarios shared by EasyInfra and InfraEnv.",
+  "type": "module",
+  "license": "(Apache-2.0 AND CC-BY-4.0)",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "README.md",
+    "LICENSE",
+    "LICENSE-CODE",
+    "LICENSE-CONTENT"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./catalog": {
+      "types": "./dist/catalog.d.ts",
+      "import": "./dist/catalog.js"
+    },
+    "./manifest": {
+      "types": "./dist/manifest.d.ts",
+      "import": "./dist/manifest.js"
+    },
+    "./profile/easyinfra": "./dist/profiles/easyinfra/catalog.json",
+    "./profile/runtime": "./dist/profiles/runtime/catalog.json"
+  },
+  "scripts": {
+    "build": "tsx scripts/build.ts && tsc -p tsconfig.json",
+    "content:check": "tsx scripts/content-check.ts",
+    "lint": "tsc --noEmit -p tsconfig.json",
+    "test": "tsx --test tests/*.test.ts",
+    "check": "npm run lint && npm run content:check && npm test && npm run build",
+    "pack:check": "npm pack --dry-run"
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "3.1.1",
+    "ajv": "8.17.1",
+    "unist-util-visit": "5.0.0",
+    "yaml": "2.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.0",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3"
+  }
+}
+

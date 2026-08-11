@@ -1,0 +1,997 @@
+[
+  {
+    "slug": "gcc",
+    "name": "GCC",
+    "category": "compiler-build",
+    "summary": "GNU 编译器套件。",
+    "useCase": "构建 C/C++、OpenMP 与大量 Linux/HPC 软件。",
+    "difficulty": "beginner",
+    "status": "active",
+    "ecosystems": [
+      "linux",
+      "cross-platform"
+    ],
+    "website": "https://gcc.gnu.org/",
+    "docs": "https://gcc.gnu.org/onlinedocs/",
+    "github": "https://gcc.gnu.org/git.html",
+    "knowledgeIds": [
+      "concept:compiler",
+      "concept:abi"
+    ],
+    "caseIds": [
+      "case:c-socket-echo",
+      "case:openmp-parallel-reduction",
+      "case:mpi-first-message"
+    ],
+    "id": "tool:gcc"
+  },
+  {
+    "slug": "clang",
+    "name": "Clang",
+    "category": "compiler-build",
+    "summary": "LLVM 体系中的 C/C++ 前端。",
+    "useCase": "获得清晰诊断、静态分析和现代工具链集成。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform"
+    ],
+    "website": "https://clang.llvm.org/",
+    "docs": "https://clang.llvm.org/docs/",
+    "github": "https://github.com/llvm/llvm-project",
+    "knowledgeIds": [
+      "concept:compiler",
+      "concept:abi"
+    ],
+    "caseIds": [],
+    "id": "tool:clang"
+  },
+  {
+    "slug": "llvm",
+    "name": "LLVM",
+    "category": "compiler-build",
+    "summary": "模块化编译器基础设施。",
+    "useCase": "构建优化器、代码生成器与异构编译栈。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform"
+    ],
+    "website": "https://llvm.org/",
+    "docs": "https://llvm.org/docs/",
+    "github": "https://github.com/llvm/llvm-project",
+    "knowledgeIds": [
+      "concept:compiler",
+      "concept:computer-architecture"
+    ],
+    "caseIds": [],
+    "id": "tool:llvm"
+  },
+  {
+    "slug": "nvcc",
+    "name": "NVCC",
+    "category": "compiler-build",
+    "summary": "CUDA C++ 编译驱动。",
+    "useCase": "分离并编译主机与设备代码。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/cuda-compiler-driver-nvcc",
+    "docs": "https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/",
+    "knowledgeIds": [
+      "concept:compiler",
+      "concept:cuda"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "id": "tool:nvcc"
+  },
+  {
+    "slug": "cmake",
+    "name": "CMake",
+    "category": "compiler-build",
+    "summary": "跨平台构建配置生成器。",
+    "useCase": "描述目标、依赖和平台差异。",
+    "difficulty": "beginner",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform"
+    ],
+    "website": "https://cmake.org/",
+    "docs": "https://cmake.org/cmake/help/latest/",
+    "github": "https://github.com/Kitware/CMake",
+    "knowledgeIds": [
+      "concept:build-system"
+    ],
+    "caseIds": [
+      "case:openmp-parallel-reduction",
+      "case:mpi-first-message",
+      "case:cuda-vector-add"
+    ],
+    "id": "tool:cmake"
+  },
+  {
+    "slug": "make",
+    "name": "Make",
+    "category": "compiler-build",
+    "summary": "基于依赖规则的经典构建工具。",
+    "useCase": "理解增量构建与传统 HPC 项目。",
+    "difficulty": "beginner",
+    "status": "mature",
+    "ecosystems": [
+      "linux",
+      "cross-platform"
+    ],
+    "website": "https://www.gnu.org/software/make/",
+    "docs": "https://www.gnu.org/software/make/manual/",
+    "github": "https://git.savannah.gnu.org/cgit/make.git",
+    "knowledgeIds": [
+      "concept:build-system"
+    ],
+    "caseIds": [],
+    "id": "tool:make"
+  },
+  {
+    "slug": "ninja",
+    "name": "Ninja",
+    "category": "compiler-build",
+    "summary": "面向速度的小型构建执行器。",
+    "useCase": "执行 CMake 等生成的大规模构建图。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform"
+    ],
+    "website": "https://ninja-build.org/",
+    "docs": "https://ninja-build.org/manual.html",
+    "github": "https://github.com/ninja-build/ninja",
+    "knowledgeIds": [
+      "concept:build-system"
+    ],
+    "caseIds": [],
+    "id": "tool:ninja"
+  },
+  {
+    "slug": "openmp",
+    "name": "OpenMP",
+    "category": "parallel",
+    "summary": "共享内存并行编程标准。",
+    "useCase": "用指令并行化循环、任务和归约。",
+    "difficulty": "beginner",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform"
+    ],
+    "website": "https://www.openmp.org/",
+    "docs": "https://www.openmp.org/specifications/",
+    "github": "https://github.com/OpenMP/Examples",
+    "knowledgeIds": [
+      "concept:shared-memory",
+      "concept:openmp"
+    ],
+    "caseIds": [
+      "case:openmp-parallel-reduction"
+    ],
+    "id": "tool:openmp"
+  },
+  {
+    "slug": "mpi",
+    "name": "MPI",
+    "category": "parallel",
+    "summary": "消息传递接口标准。",
+    "useCase": "编写可跨进程、跨节点运行的并行程序。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform"
+    ],
+    "website": "https://www.mpi-forum.org/",
+    "docs": "https://www.mpi-forum.org/docs/",
+    "knowledgeIds": [
+      "concept:distributed-memory",
+      "concept:mpi",
+      "concept:collectives"
+    ],
+    "caseIds": [
+      "case:mpi-first-message",
+      "case:ring-allreduce-simulator"
+    ],
+    "id": "tool:mpi"
+  },
+  {
+    "slug": "openmpi",
+    "name": "Open MPI",
+    "category": "parallel",
+    "summary": "广泛使用的 MPI 实现。",
+    "useCase": "在研究和生产集群运行 MPI 作业。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "linux",
+      "cross-platform"
+    ],
+    "website": "https://www.open-mpi.org/",
+    "docs": "https://docs.open-mpi.org/",
+    "github": "https://github.com/open-mpi/ompi",
+    "knowledgeIds": [
+      "concept:mpi"
+    ],
+    "caseIds": [
+      "case:mpi-first-message"
+    ],
+    "id": "tool:openmpi"
+  },
+  {
+    "slug": "mpich",
+    "name": "MPICH",
+    "category": "parallel",
+    "summary": "高性能、可移植的 MPI 实现。",
+    "useCase": "学习标准行为并支撑多个厂商 MPI。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "linux",
+      "cross-platform"
+    ],
+    "website": "https://www.mpich.org/",
+    "docs": "https://www.mpich.org/documentation/guides/",
+    "github": "https://github.com/pmodels/mpich",
+    "knowledgeIds": [
+      "concept:mpi"
+    ],
+    "caseIds": [
+      "case:mpi-first-message"
+    ],
+    "id": "tool:mpich"
+  },
+  {
+    "slug": "cuda",
+    "name": "CUDA",
+    "category": "gpu",
+    "summary": "NVIDIA GPU 计算平台。",
+    "useCase": "开发 Kernel、调用加速库并管理设备。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/cuda-zone",
+    "docs": "https://docs.nvidia.com/cuda/",
+    "github": "https://github.com/NVIDIA/cuda-samples",
+    "knowledgeIds": [
+      "concept:gpu-architecture",
+      "concept:cuda",
+      "concept:gpu-memory"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "id": "tool:cuda"
+  },
+  {
+    "slug": "rocm",
+    "name": "ROCm",
+    "category": "gpu",
+    "summary": "AMD 开源 GPU 计算平台。",
+    "useCase": "在 AMD GPU 上开发 AI 与 HPC 工作负载。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "amd",
+      "linux"
+    ],
+    "website": "https://www.amd.com/en/products/software/rocm.html",
+    "docs": "https://rocm.docs.amd.com/",
+    "github": "https://github.com/ROCm/ROCm",
+    "knowledgeIds": [
+      "concept:gpu-architecture",
+      "concept:kernel"
+    ],
+    "caseIds": [],
+    "id": "tool:rocm"
+  },
+  {
+    "slug": "oneapi",
+    "name": "oneAPI",
+    "category": "gpu",
+    "summary": "Intel 跨架构开发工具栈。",
+    "useCase": "面向 CPU、GPU 与加速器统一开发。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "intel",
+      "linux",
+      "cross-platform"
+    ],
+    "website": "https://www.intel.com/content/www/us/en/developer/tools/oneapi/overview.html",
+    "docs": "https://www.intel.com/content/www/us/en/developer/tools/oneapi/documentation.html",
+    "github": "https://github.com/oneapi-src",
+    "knowledgeIds": [
+      "concept:gpu-architecture",
+      "concept:compiler"
+    ],
+    "caseIds": [],
+    "id": "tool:oneapi"
+  },
+  {
+    "slug": "triton",
+    "name": "Triton",
+    "category": "gpu",
+    "summary": "面向 GPU Kernel 的 Python DSL 与编译器。",
+    "useCase": "快速编写接近手工 CUDA 性能的自定义算子。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "amd",
+      "linux"
+    ],
+    "website": "https://triton-lang.org/",
+    "docs": "https://triton-lang.org/main/index.html",
+    "github": "https://github.com/triton-lang/triton",
+    "knowledgeIds": [
+      "concept:kernel",
+      "concept:compiler"
+    ],
+    "caseIds": [],
+    "id": "tool:triton"
+  },
+  {
+    "slug": "nccl",
+    "name": "NCCL",
+    "category": "communication",
+    "summary": "NVIDIA GPU 集合通信库。",
+    "useCase": "执行 AllReduce、Broadcast 等多 GPU 通信。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/nccl",
+    "docs": "https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/",
+    "github": "https://github.com/NVIDIA/nccl",
+    "knowledgeIds": [
+      "concept:collectives",
+      "concept:topology",
+      "concept:nccl"
+    ],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "id": "tool:nccl"
+  },
+  {
+    "slug": "gloo",
+    "name": "Gloo",
+    "category": "communication",
+    "summary": "面向机器学习的集合通信库。",
+    "useCase": "作为 PyTorch CPU 或部分 GPU 通信后端。",
+    "difficulty": "advanced",
+    "status": "mature",
+    "ecosystems": [
+      "cross-platform",
+      "linux"
+    ],
+    "website": "https://github.com/facebookincubator/gloo",
+    "docs": "https://github.com/facebookincubator/gloo/tree/main/docs",
+    "github": "https://github.com/facebookincubator/gloo",
+    "knowledgeIds": [
+      "concept:collectives",
+      "concept:nccl"
+    ],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "id": "tool:gloo"
+  },
+  {
+    "slug": "ucx",
+    "name": "UCX",
+    "category": "communication",
+    "summary": "统一高性能通信抽象。",
+    "useCase": "连接 RDMA、共享内存、GPU 与 MPI 运行时。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "linux",
+      "nvidia",
+      "amd"
+    ],
+    "website": "https://openucx.org/",
+    "docs": "https://openucx.readthedocs.io/",
+    "github": "https://github.com/openucx/ucx",
+    "knowledgeIds": [
+      "concept:interconnect",
+      "concept:rdma"
+    ],
+    "caseIds": [],
+    "id": "tool:ucx"
+  },
+  {
+    "slug": "libfabric",
+    "name": "libfabric",
+    "category": "communication",
+    "summary": "OpenFabrics Interfaces 通信框架。",
+    "useCase": "为 HPC 中间件提供 Fabric 抽象。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "linux"
+    ],
+    "website": "https://ofiwg.github.io/libfabric/",
+    "docs": "https://ofiwg.github.io/libfabric/main/",
+    "github": "https://github.com/ofiwg/libfabric",
+    "knowledgeIds": [
+      "concept:networking",
+      "concept:interconnect",
+      "concept:rdma"
+    ],
+    "caseIds": [],
+    "id": "tool:libfabric"
+  },
+  {
+    "slug": "horovod",
+    "name": "Horovod",
+    "category": "communication",
+    "summary": "早期流行的分布式深度学习框架。",
+    "useCase": "理解基于集合通信封装多框架训练的历史路径。",
+    "difficulty": "advanced",
+    "status": "legacy",
+    "ecosystems": [
+      "linux",
+      "nvidia"
+    ],
+    "website": "https://horovod.ai/",
+    "docs": "https://horovod.readthedocs.io/",
+    "github": "https://github.com/horovod/horovod",
+    "knowledgeIds": [
+      "concept:distributed-training",
+      "concept:collectives"
+    ],
+    "caseIds": [],
+    "id": "tool:horovod"
+  },
+  {
+    "slug": "pytorch",
+    "name": "PyTorch",
+    "category": "framework",
+    "summary": "主流张量与深度学习框架。",
+    "useCase": "开发模型、算子、训练与分布式系统。",
+    "difficulty": "beginner",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform",
+      "nvidia",
+      "amd"
+    ],
+    "website": "https://pytorch.org/",
+    "docs": "https://docs.pytorch.org/",
+    "github": "https://github.com/pytorch/pytorch",
+    "knowledgeIds": [
+      "concept:pytorch",
+      "concept:distributed-training",
+      "concept:ddp"
+    ],
+    "caseIds": [],
+    "id": "tool:pytorch"
+  },
+  {
+    "slug": "tensorflow",
+    "name": "TensorFlow",
+    "category": "framework",
+    "summary": "端到端机器学习框架。",
+    "useCase": "构建训练、数据和部署流水线。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform",
+      "nvidia"
+    ],
+    "website": "https://www.tensorflow.org/",
+    "docs": "https://www.tensorflow.org/api_docs",
+    "github": "https://github.com/tensorflow/tensorflow",
+    "knowledgeIds": [
+      "concept:pytorch",
+      "concept:distributed-training"
+    ],
+    "caseIds": [],
+    "id": "tool:tensorflow"
+  },
+  {
+    "slug": "jax",
+    "name": "JAX",
+    "category": "framework",
+    "summary": "可组合变换与 XLA 加速的数组系统。",
+    "useCase": "研究自动微分、编译和 SPMD 并行。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform",
+      "nvidia",
+      "amd"
+    ],
+    "website": "https://jax.dev/",
+    "docs": "https://docs.jax.dev/",
+    "github": "https://github.com/jax-ml/jax",
+    "knowledgeIds": [
+      "concept:pytorch",
+      "concept:compiler"
+    ],
+    "caseIds": [],
+    "id": "tool:jax"
+  },
+  {
+    "slug": "tensorrt",
+    "name": "TensorRT",
+    "category": "operator-inference",
+    "summary": "NVIDIA 高性能推理 SDK。",
+    "useCase": "优化计算图、精度和执行引擎。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/tensorrt",
+    "docs": "https://docs.nvidia.com/deeplearning/tensorrt/",
+    "github": "https://github.com/NVIDIA/TensorRT",
+    "knowledgeIds": [
+      "concept:inference-engine",
+      "concept:operator-library"
+    ],
+    "caseIds": [],
+    "id": "tool:tensorrt"
+  },
+  {
+    "slug": "cudnn",
+    "name": "cuDNN",
+    "category": "operator-inference",
+    "summary": "NVIDIA 深度神经网络加速库。",
+    "useCase": "提供卷积、Attention 等优化算子。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/cudnn",
+    "docs": "https://docs.nvidia.com/deeplearning/cudnn/",
+    "github": "https://github.com/NVIDIA/cudnn-frontend",
+    "knowledgeIds": [
+      "concept:operator-library",
+      "concept:kernel"
+    ],
+    "caseIds": [],
+    "id": "tool:cudnn"
+  },
+  {
+    "slug": "cublas",
+    "name": "cuBLAS",
+    "category": "operator-inference",
+    "summary": "NVIDIA GPU 线性代数库。",
+    "useCase": "执行 GEMM 与 BLAS 运算。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/cublas",
+    "docs": "https://docs.nvidia.com/cuda/cublas/",
+    "knowledgeIds": [
+      "concept:operator-library",
+      "concept:kernel"
+    ],
+    "caseIds": [],
+    "id": "tool:cublas"
+  },
+  {
+    "slug": "cutlass",
+    "name": "CUTLASS",
+    "category": "operator-inference",
+    "summary": "CUDA C++ 模板化线性代数组件。",
+    "useCase": "研究和构建高性能 GEMM 与融合算子。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/cutlass",
+    "docs": "https://docs.nvidia.com/cutlass/",
+    "github": "https://github.com/NVIDIA/cutlass",
+    "knowledgeIds": [
+      "concept:operator-library",
+      "concept:kernel"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "id": "tool:cutlass"
+  },
+  {
+    "slug": "onednn",
+    "name": "oneDNN",
+    "category": "operator-inference",
+    "summary": "跨架构深度学习性能库。",
+    "useCase": "为 CPU 与部分加速器提供优化算子。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "intel",
+      "cross-platform"
+    ],
+    "website": "https://www.intel.com/content/www/us/en/developer/tools/oneapi/onednn.html",
+    "docs": "https://uxlfoundation.github.io/oneDNN/",
+    "github": "https://github.com/uxlfoundation/oneDNN",
+    "knowledgeIds": [
+      "concept:operator-library",
+      "concept:kernel"
+    ],
+    "caseIds": [],
+    "id": "tool:onednn"
+  },
+  {
+    "slug": "vllm",
+    "name": "vLLM",
+    "category": "operator-inference",
+    "summary": "面向 LLM 的高吞吐推理与服务引擎。",
+    "useCase": "研究 PagedAttention、连续批处理和 KV Cache。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "amd",
+      "linux"
+    ],
+    "website": "https://vllm.ai/",
+    "docs": "https://docs.vllm.ai/",
+    "github": "https://github.com/vllm-project/vllm",
+    "knowledgeIds": [
+      "concept:inference-engine",
+      "concept:serving"
+    ],
+    "caseIds": [],
+    "id": "tool:vllm"
+  },
+  {
+    "slug": "tensorrt-llm",
+    "name": "TensorRT-LLM",
+    "category": "operator-inference",
+    "summary": "NVIDIA LLM 推理优化栈。",
+    "useCase": "构建量化、并行和高吞吐 LLM 服务。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/tensorrt-llm",
+    "docs": "https://nvidia.github.io/TensorRT-LLM/",
+    "github": "https://github.com/NVIDIA/TensorRT-LLM",
+    "knowledgeIds": [
+      "concept:inference-engine",
+      "concept:serving",
+      "concept:model-parallelism"
+    ],
+    "caseIds": [],
+    "id": "tool:tensorrt-llm"
+  },
+  {
+    "slug": "docker",
+    "name": "Docker",
+    "category": "environment",
+    "summary": "容器镜像与运行时生态。",
+    "useCase": "封装可复现实验和开发环境。",
+    "difficulty": "beginner",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform",
+      "linux",
+      "cloud-native"
+    ],
+    "website": "https://www.docker.com/",
+    "docs": "https://docs.docker.com/",
+    "github": "https://github.com/docker",
+    "knowledgeIds": [
+      "concept:linux",
+      "concept:filesystem"
+    ],
+    "caseIds": [
+      "case:c-socket-echo"
+    ],
+    "id": "tool:docker"
+  },
+  {
+    "slug": "apptainer",
+    "name": "Apptainer",
+    "category": "environment",
+    "summary": "面向 HPC 的容器系统。",
+    "useCase": "在共享集群以非特权方式运行容器工作负载。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "linux"
+    ],
+    "website": "https://apptainer.org/",
+    "docs": "https://apptainer.org/docs/",
+    "github": "https://github.com/apptainer/apptainer",
+    "knowledgeIds": [
+      "concept:linux",
+      "concept:scheduler"
+    ],
+    "caseIds": [],
+    "id": "tool:apptainer"
+  },
+  {
+    "slug": "conda",
+    "name": "Conda",
+    "category": "environment",
+    "summary": "跨平台包与环境管理器。",
+    "useCase": "隔离 Python、原生库和 CUDA 依赖。",
+    "difficulty": "beginner",
+    "status": "mature",
+    "ecosystems": [
+      "cross-platform"
+    ],
+    "website": "https://conda.org/",
+    "docs": "https://docs.conda.io/",
+    "github": "https://github.com/conda/conda",
+    "knowledgeIds": [
+      "concept:python",
+      "concept:build-system"
+    ],
+    "caseIds": [],
+    "id": "tool:conda"
+  },
+  {
+    "slug": "micromamba",
+    "name": "Micromamba",
+    "category": "environment",
+    "summary": "轻量高速的 Conda 兼容客户端。",
+    "useCase": "在容器与 CI 中创建可复现环境。",
+    "difficulty": "beginner",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform"
+    ],
+    "website": "https://mamba.readthedocs.io/",
+    "docs": "https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html",
+    "github": "https://github.com/mamba-org/mamba",
+    "knowledgeIds": [
+      "concept:python",
+      "concept:build-system"
+    ],
+    "caseIds": [],
+    "id": "tool:micromamba"
+  },
+  {
+    "slug": "nsight-systems",
+    "name": "Nsight Systems",
+    "category": "observability",
+    "summary": "跨 CPU、GPU、网络的系统时间线分析器。",
+    "useCase": "定位 GPU 空闲、同步和通信等待。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/nsight-systems",
+    "docs": "https://docs.nvidia.com/nsight-systems/",
+    "knowledgeIds": [
+      "concept:gpu-profiling",
+      "concept:observability"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "id": "tool:nsight-systems"
+  },
+  {
+    "slug": "nsight-compute",
+    "name": "Nsight Compute",
+    "category": "observability",
+    "summary": "CUDA Kernel 性能分析器。",
+    "useCase": "分析访存、占用率和硬件计数器。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "nvidia",
+      "linux"
+    ],
+    "website": "https://developer.nvidia.com/nsight-compute",
+    "docs": "https://docs.nvidia.com/nsight-compute/",
+    "knowledgeIds": [
+      "concept:gpu-profiling",
+      "concept:roofline"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "id": "tool:nsight-compute"
+  },
+  {
+    "slug": "perf",
+    "name": "perf",
+    "category": "observability",
+    "summary": "Linux 内核性能分析工具。",
+    "useCase": "采样 CPU、调用栈和硬件事件。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "linux"
+    ],
+    "website": "https://perf.wiki.kernel.org/",
+    "docs": "https://perf.wiki.kernel.org/index.php/Tutorial",
+    "github": "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/",
+    "knowledgeIds": [
+      "concept:profiling",
+      "concept:observability"
+    ],
+    "caseIds": [
+      "case:openmp-parallel-reduction"
+    ],
+    "id": "tool:perf"
+  },
+  {
+    "slug": "vtune",
+    "name": "Intel VTune",
+    "category": "observability",
+    "summary": "CPU 与系统性能分析器。",
+    "useCase": "定位热点、并发和内存瓶颈。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "intel",
+      "linux",
+      "cross-platform"
+    ],
+    "website": "https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html",
+    "docs": "https://www.intel.com/content/www/us/en/docs/vtune-profiler/user-guide/current/overview.html",
+    "knowledgeIds": [
+      "concept:profiling",
+      "concept:numa"
+    ],
+    "caseIds": [],
+    "id": "tool:vtune"
+  },
+  {
+    "slug": "prometheus",
+    "name": "Prometheus",
+    "category": "observability",
+    "summary": "时序指标采集与查询系统。",
+    "useCase": "监控训练、推理和集群服务。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "linux",
+      "cloud-native"
+    ],
+    "website": "https://prometheus.io/",
+    "docs": "https://prometheus.io/docs/",
+    "github": "https://github.com/prometheus/prometheus",
+    "knowledgeIds": [
+      "concept:observability",
+      "concept:serving"
+    ],
+    "caseIds": [],
+    "id": "tool:prometheus"
+  },
+  {
+    "slug": "grafana",
+    "name": "Grafana",
+    "category": "observability",
+    "summary": "指标、日志和 Trace 可视化平台。",
+    "useCase": "构建跨层诊断仪表板。",
+    "difficulty": "beginner",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform",
+      "cloud-native"
+    ],
+    "website": "https://grafana.com/",
+    "docs": "https://grafana.com/docs/grafana/latest/",
+    "github": "https://github.com/grafana/grafana",
+    "knowledgeIds": [
+      "concept:observability",
+      "concept:serving"
+    ],
+    "caseIds": [],
+    "id": "tool:grafana"
+  },
+  {
+    "slug": "slurm",
+    "name": "Slurm",
+    "category": "scheduler",
+    "summary": "HPC 工作负载与资源管理器。",
+    "useCase": "排队、放置并运行多节点批处理任务。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "linux"
+    ],
+    "website": "https://www.schedmd.com/slurm/",
+    "docs": "https://slurm.schedmd.com/documentation.html",
+    "github": "https://github.com/SchedMD/slurm",
+    "knowledgeIds": [
+      "concept:scheduler",
+      "concept:slurm"
+    ],
+    "caseIds": [],
+    "id": "tool:slurm"
+  },
+  {
+    "slug": "kubernetes",
+    "name": "Kubernetes",
+    "category": "scheduler",
+    "summary": "容器编排与声明式控制平台。",
+    "useCase": "构建训练、推理和平台控制面。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "cloud-native",
+      "linux"
+    ],
+    "website": "https://kubernetes.io/",
+    "docs": "https://kubernetes.io/docs/",
+    "github": "https://github.com/kubernetes/kubernetes",
+    "knowledgeIds": [
+      "concept:scheduler",
+      "concept:kubernetes",
+      "concept:serving"
+    ],
+    "caseIds": [],
+    "id": "tool:kubernetes"
+  },
+  {
+    "slug": "ray",
+    "name": "Ray",
+    "category": "scheduler",
+    "summary": "面向 Python 与 AI 的分布式计算框架。",
+    "useCase": "编排训练、数据与推理工作负载。",
+    "difficulty": "intermediate",
+    "status": "active",
+    "ecosystems": [
+      "cross-platform",
+      "cloud-native"
+    ],
+    "website": "https://www.ray.io/",
+    "docs": "https://docs.ray.io/",
+    "github": "https://github.com/ray-project/ray",
+    "knowledgeIds": [
+      "concept:distributed-systems",
+      "concept:scheduler"
+    ],
+    "caseIds": [],
+    "id": "tool:ray"
+  },
+  {
+    "slug": "volcano",
+    "name": "Volcano",
+    "category": "scheduler",
+    "summary": "Kubernetes 原生批处理调度系统。",
+    "useCase": "提供 Gang Scheduling、队列和异构资源能力。",
+    "difficulty": "advanced",
+    "status": "active",
+    "ecosystems": [
+      "cloud-native",
+      "linux"
+    ],
+    "website": "https://volcano.sh/",
+    "docs": "https://volcano.sh/en/docs/",
+    "github": "https://github.com/volcano-sh/volcano",
+    "knowledgeIds": [
+      "concept:scheduler",
+      "concept:kubernetes"
+    ],
+    "caseIds": [],
+    "id": "tool:volcano"
+  }
+]

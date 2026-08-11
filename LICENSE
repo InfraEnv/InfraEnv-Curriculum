@@ -1,0 +1,12 @@
+InfraEnv Curriculum uses two licenses so that software and educational works keep
+clear, machine-readable boundaries.
+
+Code, schemas, compiler logic, tests, and scripts are licensed under the Apache
+License 2.0. See LICENSE-CODE.
+
+Course prose, MDX lessons, scenarios, exercises, diagrams, and other educational
+assets under content/ are licensed under Creative Commons Attribution 4.0
+International. See LICENSE-CONTENT.
+
+Unless a file states otherwise, that directory-based rule is authoritative.
+

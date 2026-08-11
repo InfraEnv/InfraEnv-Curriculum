@@ -1,0 +1,157 @@
+id: lab:find-slow-worker
+slug: find-slow-worker
+title: Find Slow Worker
+lessonId: lesson:find-slow-worker
+scenarioRef:
+  id: scenario:slow-worker-bandwidth-drop
+  version: 1.0.0
+simulationLevel: S2
+requirements:
+  node: ">=22"
+  docker: ">=26"
+  operatingSystems:
+    - Windows 11 with Docker Desktop
+    - Linux with Docker Engine
+    - macOS with Docker Desktop
+  cpuCores: 2
+  memoryMiB: 2048
+  diskMiB: 1536
+  realGpuRequired: false
+  networkAccessDuringLab: false
+allowedUiActions:
+  - pause
+  - resume
+  - reset
+  - inject-listed-fault
+  - clear-listed-fault
+steps:
+  - id: step:doctor
+    order: 1
+    kind: command
+    title: 检查本机运行条件
+    instruction: 在宿主终端确认 Node.js 与 Docker 能满足实验要求。
+    command: infraenv doctor
+    expectedObservation: Docker 可用、Runtime 与 Sandbox 镜像就绪；不要求真实 GPU。
+    hint: Docker 未启动时先启动 Docker Desktop，不要尝试使用 MinGW 替代 Linux。
+  - id: step:list-labs
+    order: 2
+    kind: command
+    title: 查看可用实验
+    instruction: 确认 Find Slow Worker 已从课程快照加载。
+    command: infraenv lab list
+    expectedObservation: 列表包含 find-slow-worker，标记为 SIMULATED / S2。
+    hint: 若列表为空，检查课程快照版本和 checksum。
+  - id: step:start-lab
+    order: 3
+    kind: command
+    title: 启动隔离会话
+    instruction: 启动 Runtime Sidecar、Ubuntu Sandbox 和本地只读观察 UI。
+    command: infraenv lab start find-slow-worker --ui
+    expectedObservation: 进入真实 Ubuntu bash，提示符持续展示 SIMULATED / S2，会话 UI 绑定 127.0.0.1 随机端口。
+    hint: Runtime 不应挂载 Docker Socket，也不应把宿主目录暴露给 Sandbox。
+  - id: step:inspect-gpu-inventory
+    order: 4
+    kind: observe
+    title: 观察虚拟 GPU 清单
+    instruction: 检查节点内可见的逻辑 GPU 与模拟披露信息。
+    command: nvidia-smi
+    expectedObservation: 当前节点显示 8 张 NVIDIA H100 SXM (SIMULATED)，输出明确标注不是真实遥测。
+    hint: 清单数量用于拓扑推理，不能作为硬件性能基准。
+  - id: step:inspect-scheduler
+    order: 5
+    kind: observe
+    title: 检查集群与任务
+    instruction: 先看节点状态，再确认训练作业仍在运行。
+    command: sinfo && squeue && infraenv nodes && infraenv jobs
+    expectedObservation: 16 个节点、128 张虚拟 GPU 和一个运行中的同步训练作业，没有节点完全宕机。
+    hint: 部分性能故障不会让调度器把节点标成 DOWN。
+  - id: step:network-metrics
+    order: 6
+    kind: observe
+    title: 对比网络指标
+    instruction: 查找相对基线显著偏离的节点链路。
+    command: infraenv metrics network
+    expectedObservation: 虚拟 T+40 秒后 node03 带宽从 400 Gbps 降至 20 Gbps，其他节点保持基线附近。
+    hint: 优先比较同一时间窗口内的节点差异。
+  - id: step:gpu-metrics
+    order: 7
+    kind: observe
+    title: 关联 GPU 与训练指标
+    instruction: 查看 GPU 空闲、同步等待、Step Time 和吞吐的共同变化。
+    command: infraenv metrics gpu
+    expectedObservation: Worker03 通信变慢，其他 Worker 同步等待增加，全局 Step Time 上升且吞吐下降。
+    hint: 多数 GPU 同时空闲不意味着多数 GPU 同时损坏。
+  - id: step:inspect-node03
+    order: 8
+    kind: diagnose
+    title: 深入检查候选节点
+    instruction: 查看 node03 的链路、Worker 和故障事件证据。
+    command: infraenv inspect node03
+    expectedObservation: node03 显示链路带宽异常及对应 Worker 通信等待，但 Runtime 不直接给出最终答案。
+    hint: 将节点异常与训练时间线对齐。
+  - id: step:diagnose
+    order: 9
+    kind: diagnose
+    title: 获取候选诊断
+    instruction: 让诊断器汇总相关性，保留你自己的因果判断。
+    command: infraenv diagnose
+    expectedObservation: 输出指向网络与慢参与者的候选方向，不直接显示根因和目标的答案组合。
+    hint: diagnose 是证据摘要，不是答案生成器。
+  - id: step:submit-diagnosis
+    order: 10
+    kind: submit
+    title: 提交根因判断
+    instruction: 在修复前记录根因和目标，验证诊断是否准确。
+    command: infraenv lab submit --root-cause network.bandwidth_drop --target node03
+    expectedObservation: 诊断正确，但由于故障仍处于 active 且指标未恢复，实验状态为 not-yet-passed。
+    hint: 正确答案只是闭环的一部分。
+  - id: step:clear-fault
+    order: 11
+    kind: repair
+    title: 清除带宽故障
+    instruction: 只清除 Scenario 白名单中的 node03 带宽故障。
+    command: infraenv fault clear fault:node03-bandwidth
+    expectedObservation: 故障状态变为 cleared，node03 带宽与训练指标按确定性模型恢复。
+    hint: 清除后等待一个虚拟采样窗口再提交。
+  - id: step:final-submit
+    order: 12
+    kind: submit
+    title: 验证恢复并完成实验
+    instruction: 让声明式 Validator 检查完整证据、修复状态与关键指标。
+    command: infraenv lab submit
+    expectedObservation: 所有验证项通过，结果记录内容、Runtime、Scenario 版本和资产 checksum。
+    hint: 若未通过，逐项查看缺失观察或未恢复指标。
+validators:
+  - id: validator:network-observed
+    kind: observation-recorded
+    observation: metrics.network
+  - id: validator:gpu-observed
+    kind: observation-recorded
+    observation: metrics.gpu
+  - id: validator:node-inspection-observed
+    kind: observation-recorded
+    observation: node.inspect
+  - id: validator:node03-inspected
+    kind: target-inspected
+    target: node03
+  - id: validator:diagnosis-correct
+    kind: diagnosis-matches
+    rootCause: network.bandwidth_drop
+    target: node03
+  - id: validator:fault-cleared
+    kind: fault-state
+    faultId: fault:node03-bandwidth
+    state: cleared
+  - id: validator:bandwidth-restored
+    kind: metric-threshold
+    metric: node03.network.bandwidth_gbps
+    operator: gte
+    value: 380
+    unit: Gbps
+  - id: validator:step-time-restored
+    kind: metric-threshold
+    metric: training.step_time_ms
+    operator: lte
+    value: 200
+    unit: ms
+

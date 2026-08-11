@@ -1,0 +1,9 @@
+id: chapter:distributed-training-diagnostics
+slug: distributed-training-diagnostics
+courseId: course:ai-infra-operations
+title: 分布式训练诊断
+englishTitle: Distributed Training Diagnostics
+summary: 从全局吞吐异常出发，沿指标、节点和网络证据定位同步训练中的慢 Worker。
+lessonIds:
+  - lesson:find-slow-worker
+

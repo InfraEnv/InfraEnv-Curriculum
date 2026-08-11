@@ -1,0 +1,135 @@
+## Overview
+
+Vector Add 不是为了展示复杂数学，而是让 CUDA 的完整控制路径保持可见：主机分配数据、设备分配显存、拷贝、启动 Kernel、同步、拷回并校验。
+
+<Callout title="硬件要求">
+此案例需要 NVIDIA GPU、可工作的驱动与 CUDA Toolkit。没有 GPU 时请先阅读控制流，不要把网页示例当作真机性能结论。
+</Callout>
+
+## Learning Goals
+
+- 把一维数据索引映射到 Grid、Block 与 Thread。
+- 正确管理主机内存和设备内存生命周期。
+- 检查异步 Kernel 错误并验证输出。
+
+## Prerequisites
+
+- C/C++ 指针、数组和编译基础。
+- CUDA 编程模型与 GPU 内存层次。
+- 一台能够通过 `nvidia-smi` 识别的 NVIDIA GPU。
+
+## Environment
+
+```bash
+nvidia-smi
+nvcc --version
+```
+
+驱动可见不等于 Toolkit 已安装；`nvidia-smi` 与 `nvcc` 分别回答不同问题。
+
+## Step-by-step Guide
+
+### 1. 编写完整的数据路径
+
+```cpp
+// vector_add.cu
+#include <cuda_runtime.h>
+#include <cmath>
+#include <cstdio>
+#include <vector>
+
+#define CUDA_CHECK(call) do {                                      \
+    cudaError_t error = (call);                                    \
+    if (error != cudaSuccess) {                                    \
+        std::fprintf(stderr, "%s:%d CUDA error: %s\n",           \
+                     __FILE__, __LINE__, cudaGetErrorString(error));\
+        return 1;                                                   \
+    }                                                              \
+} while (0)
+
+__global__ void vector_add(const float *a, const float *b, float *c, int n) {
+    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    if (index < n) c[index] = a[index] + b[index];
+}
+
+int main() {
+    const int n = 1 << 20;
+    const size_t bytes = (size_t)n * sizeof(float);
+    std::vector<float> a(n, 1.5f), b(n, 2.0f), c(n, 0.0f);
+
+    float *d_a = nullptr, *d_b = nullptr, *d_c = nullptr;
+    CUDA_CHECK(cudaMalloc(&d_a, bytes));
+    CUDA_CHECK(cudaMalloc(&d_b, bytes));
+    CUDA_CHECK(cudaMalloc(&d_c, bytes));
+    CUDA_CHECK(cudaMemcpy(d_a, a.data(), bytes, cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(d_b, b.data(), bytes, cudaMemcpyHostToDevice));
+
+    const int threads = 256;
+    const int blocks = (n + threads - 1) / threads;
+    vector_add<<<blocks, threads>>>(d_a, d_b, d_c, n);
+    CUDA_CHECK(cudaGetLastError());
+    CUDA_CHECK(cudaDeviceSynchronize());
+    CUDA_CHECK(cudaMemcpy(c.data(), d_c, bytes, cudaMemcpyDeviceToHost));
+
+    for (int i = 0; i < n; ++i) {
+        if (std::fabs(c[i] - 3.5f) > 1e-6f) {
+            std::fprintf(stderr, "mismatch at %d: %f\n", i, c[i]);
+            return 2;
+        }
+    }
+
+    std::printf("ok: %d values, blocks=%d, threads=%d\n", n, blocks, threads);
+    cudaFree(d_a); cudaFree(d_b); cudaFree(d_c);
+    return 0;
+}
+```
+
+### 2. 编译与运行
+
+```bash
+nvcc -O2 -lineinfo vector_add.cu -o vector_add
+./vector_add
+```
+
+### 3. 建立第一条 Timeline
+
+```bash
+nsys profile --trace=cuda,nvtx -o vector-add-report ./vector_add
+```
+
+在报告里区分 H2D Copy、Kernel、同步和 D2H Copy。不要用整个进程时间冒充 Kernel 时间。
+
+## Expected Output
+
+```text
+ok: 1048576 values, blocks=4096, threads=256
+```
+
+## Visualization
+
+```text
+Host a,b ── H2D ──▶ Device a,b
+                        │
+Grid 4096 × Block 256 ──┤ vector_add kernel
+                        ▼
+Host c   ◀── D2H ── Device c ── synchronize
+```
+
+边界判断 `index < n` 让最后一个不完整 Block 中的额外线程安全退出。
+
+## Common Errors
+
+| 现象 | 原因 | 处理 |
+| --- | --- | --- |
+| `no CUDA-capable device` | 当前环境未映射 GPU | 检查宿主驱动与容器 GPU 配置 |
+| `invalid device function` | 编译目标架构不受 GPU 支持 | 检查 Toolkit 与 `-arch` 设置 |
+| Kernel 似乎耗时为 0 | 未同步或计时范围错误 | 使用 CUDA Event 或 Nsight |
+| 输出偶发错误 | 未检查异步启动错误 | 保留 `cudaGetLastError` 与同步检查 |
+
+## Next Steps
+
+1. 使用 CUDA Event 只测 Kernel 时间。
+2. 改变 Block Size，记录 64、128、256、512 的差异。
+3. 使用 Nsight Compute 检查内存吞吐与占用率。
+
+

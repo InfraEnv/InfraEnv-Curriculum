@@ -1,0 +1,171 @@
+## Overview
+
+Ring AllReduce 把“所有节点求和并让所有节点得到结果”拆成两个阶段：Reduce-Scatter 和 AllGather。这个案例用 Python 列表模拟数据移动，不需要 GPU，也不会伪装成真实 NCCL 性能。
+
+<Callout title="模拟边界">
+本案例验证算法步骤和通信量。它不模拟 PCIe、NVLink、RDMA、协议栈、Kernel 启动或真实并发，因此不能替代硬件基准。
+</Callout>
+
+## Learning Goals
+
+- 把每个 Rank 的张量切成与 Rank 数相同的 Chunk。
+- 逐轮观察 Reduce-Scatter 和 AllGather。
+- 计算理想 Ring 中每个 Rank 的发送量，并注入慢链路。
+
+## Prerequisites
+
+- Python 列表和函数。
+- MPI Rank、集合通信和 AllReduce 的基本概念。
+- 知道带宽与延迟是两个不同量。
+
+## Environment
+
+仅需 Python 3.11+：
+
+```bash
+python --version
+```
+
+## Step-by-step Guide
+
+### 1. 编写离散步骤模拟器
+
+```python
+# ring_allreduce.py
+from copy import deepcopy
+
+
+def chunks(values, parts):
+    width = len(values) // parts
+    return [values[i * width:(i + 1) * width] for i in range(parts)]
+
+
+def add(left, right):
+    return [a + b for a, b in zip(left, right)]
+
+
+def ring_allreduce(rank_values):
+    size = len(rank_values)
+    state = [chunks(values, size) for values in rank_values]
+
+    # Reduce-Scatter: 每轮发送一个 Chunk，并在接收端做归约。
+    for step in range(size - 1):
+        before = deepcopy(state)
+        for rank in range(size):
+            send_chunk = (rank - step) % size
+            peer = (rank + 1) % size
+            recv_chunk = send_chunk
+            state[peer][recv_chunk] = add(
+                state[peer][recv_chunk], before[rank][send_chunk]
+            )
+        print(f"reduce-scatter step {step + 1}: {state}")
+
+    # Reduce-Scatter 结束后，Rank r 持有 Chunk (r + 1) % size。
+    owned = []
+    for rank in range(size):
+        chunk_index = (rank + 1) % size
+        owned.append({chunk_index: state[rank][chunk_index]})
+
+    # AllGather: 每轮沿 Ring 传播已经归约好的 Chunk。
+    for step in range(size - 1):
+        before = deepcopy(owned)
+        for rank in range(size):
+            send_chunk = (rank - step + 1) % size
+            peer = (rank + 1) % size
+            owned[peer][send_chunk] = before[rank][send_chunk]
+        print(f"allgather step {step + 1}: {owned}")
+
+    return [[owned[rank][i][0] for i in range(size)] for rank in range(size)]
+
+
+if __name__ == "__main__":
+    inputs = [
+        [1, 1, 1, 1],
+        [2, 2, 2, 2],
+        [3, 3, 3, 3],
+        [4, 4, 4, 4],
+    ]
+    outputs = ring_allreduce(inputs)
+    expected = [10, 10, 10, 10]
+    assert all(output == expected for output in outputs)
+    print("final:", outputs)
+```
+
+这个脚本刻意打印中间状态。生产实现会复用缓冲区、异步传输并让通信和计算重叠。
+
+### 2. 运行并检查不变量
+
+```bash
+python ring_allreduce.py
+```
+
+最终每个 Rank 都必须得到 `[10, 10, 10, 10]`。如果只有某个 Rank 正确，那是 Reduce-Scatter，而不是完整 AllReduce。
+
+### 3. 计算理想通信量
+
+张量大小为 `N` 字节、Rank 数为 `P` 时，每个 Rank 在两个阶段各发送：
+
+```text
+(P - 1) × N / P
+```
+
+因此理想总发送量接近：
+
+```text
+2 × (P - 1) / P × N
+```
+
+### 4. 注入慢链路
+
+给每条边定义带宽 `bandwidth[rank]`，每轮时间取所有边传输时间的最大值：
+
+```python
+def ring_time(chunk_bytes, bandwidth_gbps, latency_us):
+    edge_times = [
+        latency_us * 1e-6 + chunk_bytes / (gbps * 1e9 / 8)
+        for gbps in bandwidth_gbps
+    ]
+    return max(edge_times)
+
+print(ring_time(64 * 1024 * 1024, [100, 100, 10, 100], 20))
+```
+
+## Expected Output
+
+中间状态会较长，最后一行应为：
+
+```text
+final: [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]]
+```
+
+## Visualization
+
+```text
+        chunk →
+Rank 0 ───────▶ Rank 1
+  ▲                │
+  │                ▼
+Rank 3 ◀─────── Rank 2
+        ← chunk
+
+Reduce-Scatter: 传输 + 求和
+AllGather:       只传输已归约 Chunk
+```
+
+Ring 的一条慢边会拖慢所在轮次；同步集合通信的完成时间由慢路径决定，而不是平均带宽决定。
+
+## Common Errors
+
+| 现象 | 原因 | 处理 |
+| --- | --- | --- |
+| 最终只有一个 Rank 完整 | 只实现了 Reduce 或 Gather 的一部分 | 分开检查两个阶段 |
+| Chunk 无法整除 | 张量长度不是 Rank 数的整数倍 | Padding 或使用不等长分片 |
+| 把总带宽相加 | 忽略每轮同步和单边限制 | 用关键路径而非平均值估算 |
+| 模拟结果比真机快很多 | 未模拟协议、竞争和执行开销 | 明确模型边界并用真机校准 |
+
+## Next Steps
+
+1. 为每个事件记录时间戳并生成 Chrome Trace JSON。
+2. 比较 Ring 与 Tree AllReduce 的延迟项和带宽项。
+3. 等 InfraEnv 模拟器仓库开放后，把此离散模型映射到可配置拓扑。
+

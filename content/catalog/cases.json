@@ -1,0 +1,135 @@
+[
+  {
+    "slug": "c-socket-echo",
+    "title": "使用 C 构建 Socket Echo 服务",
+    "englishTitle": "Build a TCP Echo Service in C",
+    "category": "systems",
+    "difficulty": "beginner",
+    "duration": "45 分钟",
+    "environment": "Linux / WSL · GCC",
+    "hardware": "任意电脑，无需 GPU",
+    "summary": "从 bind、listen、accept 到 send/recv，亲手让两个进程通过 TCP 对话。",
+    "outcomes": [
+      "识别客户端与服务端生命周期",
+      "观察字节流和端口",
+      "定位连接失败"
+    ],
+    "prerequisiteIds": [
+      "topic:c-foundations",
+      "topic:socket-networking"
+    ],
+    "toolIds": [
+      "tool:gcc"
+    ],
+    "id": "case:c-socket-echo",
+    "bodyAsset": "mdx/cases/c-socket-echo.mdx"
+  },
+  {
+    "slug": "openmp-parallel-reduction",
+    "title": "使用 OpenMP 完成并行归约",
+    "englishTitle": "Parallel Reduction with OpenMP",
+    "category": "parallel",
+    "difficulty": "intermediate",
+    "duration": "50 分钟",
+    "environment": "Linux / WSL · GCC · OpenMP",
+    "hardware": "多核 CPU",
+    "summary": "从一个有数据竞争的循环出发，使用 reduction 得到正确且可测量的加速。",
+    "outcomes": [
+      "复现一次竞态",
+      "使用 reduction 子句",
+      "计算加速比与效率"
+    ],
+    "prerequisiteIds": [
+      "topic:c-foundations",
+      "topic:process-thread",
+      "topic:openmp-basics"
+    ],
+    "toolIds": [
+      "tool:gcc",
+      "tool:openmp"
+    ],
+    "id": "case:openmp-parallel-reduction",
+    "bodyAsset": "mdx/cases/openmp-parallel-reduction.mdx"
+  },
+  {
+    "slug": "mpi-first-message",
+    "title": "编写第一个 MPI 双进程通信程序",
+    "englishTitle": "Your First MPI Message",
+    "category": "communication",
+    "difficulty": "intermediate",
+    "duration": "60 分钟",
+    "environment": "Linux / WSL · Open MPI 或 MPICH",
+    "hardware": "单机即可，无需 GPU",
+    "summary": "启动两个 Rank，发送一条带标签的消息，并观察阻塞通信的顺序。",
+    "outcomes": [
+      "理解 Rank 与 Communicator",
+      "使用 Send/Recv",
+      "识别常见死锁"
+    ],
+    "prerequisiteIds": [
+      "topic:c-foundations",
+      "topic:mpi-basics"
+    ],
+    "toolIds": [
+      "tool:mpi",
+      "tool:openmpi",
+      "tool:mpich"
+    ],
+    "id": "case:mpi-first-message",
+    "bodyAsset": "mdx/cases/mpi-first-message.mdx"
+  },
+  {
+    "slug": "cuda-vector-add",
+    "title": "编写 CUDA Vector Add Kernel",
+    "englishTitle": "Run a CUDA Vector Add Kernel",
+    "category": "gpu",
+    "difficulty": "advanced",
+    "duration": "75 分钟",
+    "environment": "Linux / WSL2 · CUDA Toolkit",
+    "hardware": "NVIDIA GPU，Compute Capability 受当前 Toolkit 支持",
+    "summary": "完成主机到设备的数据路径、Kernel 启动、同步、校验和最小计时。",
+    "outcomes": [
+      "理解 Grid 与 Block",
+      "管理设备内存",
+      "验证 Kernel 正确性"
+    ],
+    "prerequisiteIds": [
+      "topic:cuda-programming",
+      "topic:gpu-memory"
+    ],
+    "toolIds": [
+      "tool:cuda",
+      "tool:nvcc",
+      "tool:nsight-systems"
+    ],
+    "id": "case:cuda-vector-add",
+    "bodyAsset": "mdx/cases/cuda-vector-add.mdx"
+  },
+  {
+    "slug": "ring-allreduce-simulator",
+    "title": "逐步模拟 Ring AllReduce",
+    "englishTitle": "Understand Ring AllReduce Step by Step",
+    "category": "communication",
+    "difficulty": "advanced",
+    "duration": "90 分钟",
+    "environment": "Python 3.11+",
+    "hardware": "任意电脑，无需 GPU",
+    "summary": "把张量分块，逐轮执行 Reduce-Scatter 和 AllGather，并观察慢链路如何影响全局。",
+    "outcomes": [
+      "画出 Ring 数据流",
+      "计算每轮通信量",
+      "模拟带宽与慢节点"
+    ],
+    "prerequisiteIds": [
+      "topic:python-foundations",
+      "topic:mpi-basics",
+      "topic:multi-gpu-collectives"
+    ],
+    "toolIds": [
+      "tool:nccl",
+      "tool:mpi"
+    ],
+    "id": "case:ring-allreduce-simulator",
+    "bodyAsset": "mdx/cases/ring-allreduce-simulator.mdx"
+  }
+]

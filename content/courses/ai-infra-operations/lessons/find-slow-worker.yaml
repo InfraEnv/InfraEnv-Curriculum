@@ -1,0 +1,27 @@
+id: lesson:find-slow-worker
+slug: find-slow-worker
+chapterId: chapter:distributed-training-diagnostics
+title: 找出拖慢训练的 Worker
+englishTitle: Find the Slow Worker
+summary: 在 128 张虚拟 H100 的 S2 行为模拟中定位 node03 的带宽下降，修复后用指标证明恢复。
+duration: 45–60 分钟
+bodyAsset: mdx/lessons/find-slow-worker.zh-CN.mdx
+prerequisiteTopicIds:
+  - topic:linux-shell
+  - topic:distributed-systems
+  - topic:multi-gpu-collectives
+  - topic:distributed-training
+teachesConceptIds:
+  - concept:observability
+  - concept:distributed-training
+  - concept:collectives
+  - concept:topology
+  - concept:fault-tolerance
+usesToolIds:
+  - tool:nccl
+  - tool:pytorch
+  - tool:prometheus
+  - tool:grafana
+labIds:
+  - lab:find-slow-worker
+

@@ -1,0 +1,9 @@
+id: course:ai-infra-operations
+slug: ai-infra-operations
+title: AI Infra 运维与诊断
+englishTitle: AI Infrastructure Operations
+summary: 在明确标注的行为模拟集群中练习观察、定位、破坏、修复和验证。
+audience: 已掌握 Linux 基础，希望建立生产级 AI 集群故障诊断思维的学习者。
+chapterIds:
+  - chapter:distributed-training-diagnostics
+

@@ -1,0 +1,172 @@
+## Overview
+
+这一节不从“网络七层模型”背诵开始，而是让两个真实进程完成一次 TCP 对话。你会构建一个只服务单个客户端的 Echo Server：客户端发来什么，服务端就原样返回什么。
+
+<Callout title="完成标志">
+当两个终端分别显示 `client -> infra` 和 `server -> infra`，并且你能解释 `bind`、`listen`、`accept` 各自负责什么，实验就完成了。
+</Callout>
+
+## Learning Goals
+
+- 区分监听 Socket 与已连接 Socket。
+- 观察 TCP 字节流，而不是把一次 `send` 误认为一条完整消息。
+- 用返回值和 `errno` 定位端口占用、连接拒绝和对端关闭。
+
+## Prerequisites
+
+- 能编译一个 C 文件。
+- 知道 IP 地址、端口和客户端/服务端的基本含义。
+- 完成学习节点：C 语言基础、Socket 与网络。
+
+## Environment
+
+推荐 Linux、WSL 或 Linux 容器。需要 GCC 或 Clang。实验只使用回环地址 `127.0.0.1`，不会暴露到公网。
+
+```bash
+gcc --version
+mkdir -p easyinfra-echo && cd easyinfra-echo
+```
+
+## Step-by-step Guide
+
+### 1. 编写服务端
+
+```c
+// server.c
+#include <arpa/inet.h>
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
+int main(void) {
+    int server_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (server_fd < 0) { perror("socket"); return 1; }
+
+    int reuse = 1;
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
+
+    struct sockaddr_in address = {
+        .sin_family = AF_INET,
+        .sin_port = htons(8080),
+        .sin_addr.s_addr = htonl(INADDR_LOOPBACK),
+    };
+
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
+        perror("bind"); return 1;
+    }
+    if (listen(server_fd, 4) < 0) { perror("listen"); return 1; }
+
+    printf("listening on 127.0.0.1:8080\n");
+    int client_fd = accept(server_fd, NULL, NULL);
+    if (client_fd < 0) { perror("accept"); return 1; }
+
+    char buffer[256];
+    ssize_t count = recv(client_fd, buffer, sizeof(buffer), 0);
+    if (count < 0) { perror("recv"); return 1; }
+    if (count > 0 && send(client_fd, buffer, (size_t)count, 0) < 0) {
+        perror("send"); return 1;
+    }
+
+    printf("server -> %.*s\n", (int)count, buffer);
+    close(client_fd);
+    close(server_fd);
+    return 0;
+}
+```
+
+### 2. 编写客户端
+
+```c
+// client.c
+#include <arpa/inet.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
+int main(void) {
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (fd < 0) { perror("socket"); return 1; }
+
+    struct sockaddr_in server = {
+        .sin_family = AF_INET,
+        .sin_port = htons(8080),
+    };
+    inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
+
+    if (connect(fd, (struct sockaddr *)&server, sizeof(server)) < 0) {
+        perror("connect"); return 1;
+    }
+
+    const char *message = "infra";
+    send(fd, message, strlen(message), 0);
+
+    char reply[256];
+    ssize_t count = recv(fd, reply, sizeof(reply), 0);
+    printf("client -> %.*s\n", (int)count, reply);
+    close(fd);
+    return 0;
+}
+```
+
+### 3. 编译并运行
+
+```bash
+gcc -Wall -Wextra -O2 server.c -o server
+gcc -Wall -Wextra -O2 client.c -o client
+```
+
+终端 A：
+
+```bash
+./server
+```
+
+终端 B：
+
+```bash
+./client
+```
+
+## Expected Output
+
+```text
+# server
+listening on 127.0.0.1:8080
+server -> infra
+
+# client
+client -> infra
+```
+
+## Visualization
+
+```text
+client socket                       server socket
+     │ connect ──────────────────────────▶│ listen
+     │                                   │ accept
+     │ send("infra") ───────────────────▶│ recv
+     │◀────────────────── send("infra") │
+     │ recv                              │ close
+```
+
+注意：监听 Socket 只负责接收连接请求；`accept` 返回的是另一个用于数据传输的 Socket。
+
+## Common Errors
+
+| 现象 | 原因 | 检查方式 |
+| --- | --- | --- |
+| `Address already in use` | 端口仍被占用 | 等待、换端口或确认 `SO_REUSEADDR` |
+| `Connection refused` | 服务端未监听或端口不一致 | 先启动服务端并核对 8080 |
+| `recv` 返回 0 | 对端正常关闭 | 不应继续读取，把它当作 EOF |
+| 内容被截断 | 假设一次 `recv` 得到完整业务消息 | 生产代码必须循环并设计消息边界 |
+
+## Next Steps
+
+1. 把服务端改成循环处理多个客户端。
+2. 使用 `select`、`poll` 或 `epoll` 管理多个连接。
+3. 用 Wireshark 或 `tcpdump -i lo port 8080` 观察握手与报文。
+
+

@@ -1,0 +1,1398 @@
+[
+  {
+    "id": "concept:python",
+    "label": "Python",
+    "englishLabel": "Python",
+    "layer": "foundation",
+    "summary": "训练、调度与自动化工具最常见的胶水语言。",
+    "why": "它连接实验代码、框架 API 与运维工具。",
+    "prerequisites": [],
+    "resourceIds": [
+      "topic:python-foundations"
+    ],
+    "toolIds": [
+      "tool:pytorch",
+      "tool:jax"
+    ],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:data-structures",
+      "concept:pytorch"
+    ],
+    "slug": "python"
+  },
+  {
+    "id": "concept:c-cpp",
+    "label": "C / C++",
+    "englishLabel": "C / C++",
+    "layer": "foundation",
+    "summary": "直接表达内存、ABI 与系统调用的核心语言。",
+    "why": "多数高性能运行时、通信库与算子库都建立在这里。",
+    "prerequisites": [],
+    "resourceIds": [
+      "topic:c-foundations"
+    ],
+    "toolIds": [
+      "tool:gcc",
+      "tool:clang"
+    ],
+    "caseIds": [
+      "case:c-socket-echo",
+      "case:openmp-parallel-reduction",
+      "case:mpi-first-message"
+    ],
+    "next": [
+      "concept:computer-architecture",
+      "concept:memory-model",
+      "concept:socket",
+      "concept:compiler"
+    ],
+    "slug": "c-cpp"
+  },
+  {
+    "id": "concept:linux",
+    "label": "Linux",
+    "englishLabel": "Linux",
+    "layer": "foundation",
+    "summary": "AI/HPC 生产环境的共同操作系统基础。",
+    "why": "进程、设备、网络和性能工具最终都落在 Linux 接口上。",
+    "prerequisites": [],
+    "resourceIds": [
+      "topic:linux-shell"
+    ],
+    "toolIds": [
+      "tool:docker",
+      "tool:perf"
+    ],
+    "caseIds": [
+      "case:c-socket-echo"
+    ],
+    "next": [
+      "concept:shell",
+      "concept:networking",
+      "concept:process",
+      "concept:filesystem",
+      "concept:profiling",
+      "concept:slurm"
+    ],
+    "slug": "linux"
+  },
+  {
+    "id": "concept:shell",
+    "label": "Shell",
+    "englishLabel": "Shell",
+    "layer": "foundation",
+    "summary": "组合命令、环境变量、管道与自动化脚本。",
+    "why": "它是进入远程节点和批处理环境的最低摩擦入口。",
+    "prerequisites": [
+      "concept:linux"
+    ],
+    "resourceIds": [
+      "topic:linux-shell"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [
+      "concept:git",
+      "concept:build-system"
+    ],
+    "slug": "shell"
+  },
+  {
+    "id": "concept:git",
+    "label": "Git",
+    "englishLabel": "Git",
+    "layer": "foundation",
+    "summary": "记录代码与实验配置的可追溯版本。",
+    "why": "性能结论只有和代码、配置、环境绑定才可复现。",
+    "prerequisites": [
+      "concept:shell"
+    ],
+    "resourceIds": [
+      "topic:git-collaboration"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [],
+    "slug": "git"
+  },
+  {
+    "id": "concept:data-structures",
+    "label": "数据结构",
+    "englishLabel": "Data Structures",
+    "layer": "foundation",
+    "summary": "数组、队列、哈希、树和图的组织方法。",
+    "why": "调度、缓存、计算图和网络拓扑都依赖这些结构。",
+    "prerequisites": [
+      "concept:python"
+    ],
+    "resourceIds": [
+      "topic:data-structures"
+    ],
+    "toolIds": [],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:algorithms",
+      "concept:filesystem",
+      "concept:scheduler"
+    ],
+    "slug": "data-structures"
+  },
+  {
+    "id": "concept:algorithms",
+    "label": "算法与复杂度",
+    "englishLabel": "Algorithms",
+    "layer": "foundation",
+    "summary": "用时间、空间和通信代价比较方案。",
+    "why": "系统优化首先需要知道成本从哪里增长。",
+    "prerequisites": [
+      "concept:data-structures"
+    ],
+    "resourceIds": [
+      "topic:data-structures"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [
+      "concept:parallel-models"
+    ],
+    "slug": "algorithms"
+  },
+  {
+    "id": "concept:computer-architecture",
+    "label": "计算机体系结构",
+    "englishLabel": "Computer Architecture",
+    "layer": "foundation",
+    "summary": "指令、流水线、缓存和内存共同构成执行路径。",
+    "why": "只有理解数据如何流动，才能解释性能。",
+    "prerequisites": [
+      "concept:c-cpp"
+    ],
+    "resourceIds": [
+      "topic:computer-architecture"
+    ],
+    "toolIds": [
+      "tool:gcc",
+      "tool:llvm"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "next": [
+      "concept:memory-hierarchy",
+      "concept:compiler",
+      "concept:profiling",
+      "concept:performance-model",
+      "concept:gpu-architecture",
+      "concept:topology"
+    ],
+    "slug": "computer-architecture"
+  },
+  {
+    "id": "concept:memory-model",
+    "label": "内存模型",
+    "englishLabel": "Memory Model",
+    "layer": "foundation",
+    "summary": "定义数据可见性、顺序与并发访问约束。",
+    "why": "错误的共享状态假设会产生竞态和不可复现故障。",
+    "prerequisites": [
+      "concept:c-cpp"
+    ],
+    "resourceIds": [
+      "topic:c-foundations"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [
+      "concept:process",
+      "concept:synchronization",
+      "concept:abi",
+      "concept:rdma"
+    ],
+    "slug": "memory-model"
+  },
+  {
+    "id": "concept:networking",
+    "label": "计算机网络",
+    "englishLabel": "Computer Networking",
+    "layer": "foundation",
+    "summary": "分层理解地址、路由、传输与拥塞。",
+    "why": "多节点性能最终受到真实网络路径约束。",
+    "prerequisites": [
+      "concept:linux"
+    ],
+    "resourceIds": [
+      "topic:socket-networking"
+    ],
+    "toolIds": [
+      "tool:libfabric",
+      "tool:ucx"
+    ],
+    "caseIds": [
+      "case:c-socket-echo"
+    ],
+    "next": [
+      "concept:socket",
+      "concept:observability",
+      "concept:distributed-memory",
+      "concept:distributed-systems",
+      "concept:topology",
+      "concept:interconnect",
+      "concept:infiniband-roce",
+      "concept:storage"
+    ],
+    "slug": "networking"
+  },
+  {
+    "id": "concept:socket",
+    "label": "Socket",
+    "englishLabel": "Socket",
+    "layer": "foundation",
+    "summary": "进程通过网络端点交换字节流或报文。",
+    "why": "它让抽象网络第一次变成可运行的程序。",
+    "prerequisites": [
+      "concept:networking",
+      "concept:c-cpp"
+    ],
+    "resourceIds": [
+      "topic:socket-networking"
+    ],
+    "toolIds": [],
+    "caseIds": [
+      "case:c-socket-echo"
+    ],
+    "next": [],
+    "slug": "socket"
+  },
+  {
+    "id": "concept:process",
+    "label": "进程",
+    "englishLabel": "Process",
+    "layer": "systems",
+    "summary": "拥有独立地址空间与资源边界的执行实体。",
+    "why": "MPI Rank、训练 Worker 和服务进程都建立在它之上。",
+    "prerequisites": [
+      "concept:linux",
+      "concept:memory-model"
+    ],
+    "resourceIds": [
+      "topic:process-thread"
+    ],
+    "toolIds": [],
+    "caseIds": [
+      "case:mpi-first-message"
+    ],
+    "next": [
+      "concept:thread",
+      "concept:numa",
+      "concept:parallel-models",
+      "concept:distributed-memory",
+      "concept:distributed-systems"
+    ],
+    "slug": "process"
+  },
+  {
+    "id": "concept:thread",
+    "label": "线程",
+    "englishLabel": "Thread",
+    "layer": "systems",
+    "summary": "在进程内共享地址空间的调度单元。",
+    "why": "共享内存并行与运行时线程池都依赖它。",
+    "prerequisites": [
+      "concept:process"
+    ],
+    "resourceIds": [
+      "topic:process-thread"
+    ],
+    "toolIds": [
+      "tool:openmp"
+    ],
+    "caseIds": [
+      "case:openmp-parallel-reduction"
+    ],
+    "next": [
+      "concept:synchronization",
+      "concept:cache-coherence",
+      "concept:parallel-models",
+      "concept:shared-memory"
+    ],
+    "slug": "thread"
+  },
+  {
+    "id": "concept:synchronization",
+    "label": "同步原语",
+    "englishLabel": "Synchronization",
+    "layer": "systems",
+    "summary": "锁、原子、屏障与条件变量协调并发。",
+    "why": "正确性和扩展性常常在同步边界发生冲突。",
+    "prerequisites": [
+      "concept:thread",
+      "concept:memory-model"
+    ],
+    "resourceIds": [
+      "topic:process-thread"
+    ],
+    "toolIds": [
+      "tool:openmp"
+    ],
+    "caseIds": [
+      "case:openmp-parallel-reduction"
+    ],
+    "next": [
+      "concept:shared-memory"
+    ],
+    "slug": "synchronization"
+  },
+  {
+    "id": "concept:memory-hierarchy",
+    "label": "内存层次",
+    "englishLabel": "Memory Hierarchy",
+    "layer": "systems",
+    "summary": "寄存器、缓存、主存和设备存储具有不同成本。",
+    "why": "大量性能问题本质上是数据放错了位置。",
+    "prerequisites": [
+      "concept:computer-architecture"
+    ],
+    "resourceIds": [
+      "topic:computer-architecture",
+      "topic:memory-numa"
+    ],
+    "toolIds": [],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "next": [
+      "concept:cache-coherence",
+      "concept:numa",
+      "concept:io-path",
+      "concept:roofline",
+      "concept:gpu-memory"
+    ],
+    "slug": "memory-hierarchy"
+  },
+  {
+    "id": "concept:cache-coherence",
+    "label": "缓存一致性",
+    "englishLabel": "Cache Coherence",
+    "layer": "systems",
+    "summary": "多个核心维持共享数据视图的硬件协议。",
+    "why": "它解释伪共享、写放大和部分扩展瓶颈。",
+    "prerequisites": [
+      "concept:memory-hierarchy",
+      "concept:thread"
+    ],
+    "resourceIds": [
+      "topic:memory-numa"
+    ],
+    "toolIds": [],
+    "caseIds": [
+      "case:openmp-parallel-reduction"
+    ],
+    "next": [],
+    "slug": "cache-coherence"
+  },
+  {
+    "id": "concept:numa",
+    "label": "NUMA",
+    "englishLabel": "NUMA",
+    "layer": "systems",
+    "summary": "不同 CPU 与内存节点之间访问成本不对称。",
+    "why": "线程与内存放置会直接影响多路服务器性能。",
+    "prerequisites": [
+      "concept:memory-hierarchy",
+      "concept:process"
+    ],
+    "resourceIds": [
+      "topic:memory-numa"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [],
+    "slug": "numa"
+  },
+  {
+    "id": "concept:compiler",
+    "label": "编译器",
+    "englishLabel": "Compiler",
+    "layer": "systems",
+    "summary": "把高级程序转换为目标代码并进行优化。",
+    "why": "向量化、内联和设备代码生成都由它驱动。",
+    "prerequisites": [
+      "concept:c-cpp",
+      "concept:computer-architecture"
+    ],
+    "resourceIds": [
+      "topic:compiler-build"
+    ],
+    "toolIds": [
+      "tool:gcc",
+      "tool:clang",
+      "tool:llvm",
+      "tool:nvcc"
+    ],
+    "caseIds": [],
+    "next": [
+      "concept:build-system",
+      "concept:abi",
+      "concept:openmp",
+      "concept:mpi",
+      "concept:cuda",
+      "concept:operator-library"
+    ],
+    "slug": "compiler"
+  },
+  {
+    "id": "concept:build-system",
+    "label": "构建系统",
+    "englishLabel": "Build System",
+    "layer": "systems",
+    "summary": "组织源文件、依赖、选项和产物。",
+    "why": "复杂 HPC 软件的可复现构建离不开明确依赖图。",
+    "prerequisites": [
+      "concept:compiler",
+      "concept:shell"
+    ],
+    "resourceIds": [
+      "topic:compiler-build"
+    ],
+    "toolIds": [
+      "tool:cmake",
+      "tool:ninja",
+      "tool:make"
+    ],
+    "caseIds": [
+      "case:mpi-first-message",
+      "case:cuda-vector-add"
+    ],
+    "next": [],
+    "slug": "build-system"
+  },
+  {
+    "id": "concept:abi",
+    "label": "ABI",
+    "englishLabel": "Application Binary Interface",
+    "layer": "systems",
+    "summary": "约定二进制调用、对象布局与链接行为。",
+    "why": "库能否加载、符号能否解析取决于 ABI 兼容。",
+    "prerequisites": [
+      "concept:compiler",
+      "concept:memory-model"
+    ],
+    "resourceIds": [
+      "topic:compiler-build"
+    ],
+    "toolIds": [
+      "tool:gcc",
+      "tool:clang"
+    ],
+    "caseIds": [],
+    "next": [],
+    "slug": "abi"
+  },
+  {
+    "id": "concept:filesystem",
+    "label": "文件系统",
+    "englishLabel": "File System",
+    "layer": "systems",
+    "summary": "将块设备与对象组织成可命名的持久数据。",
+    "why": "数据集、检查点和日志都通过它进入训练流程。",
+    "prerequisites": [
+      "concept:linux",
+      "concept:data-structures"
+    ],
+    "resourceIds": [
+      "topic:filesystem-io"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [
+      "concept:io-path",
+      "concept:storage"
+    ],
+    "slug": "filesystem"
+  },
+  {
+    "id": "concept:io-path",
+    "label": "I/O 路径",
+    "englishLabel": "I/O Path",
+    "layer": "systems",
+    "summary": "数据从存储经过页缓存与用户空间的完整路径。",
+    "why": "GPU 空闲有时并非算力问题，而是数据供给不足。",
+    "prerequisites": [
+      "concept:filesystem",
+      "concept:memory-hierarchy"
+    ],
+    "resourceIds": [
+      "topic:filesystem-io"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [],
+    "slug": "io-path"
+  },
+  {
+    "id": "concept:profiling",
+    "label": "性能剖析",
+    "englishLabel": "Profiling",
+    "layer": "systems",
+    "summary": "用采样、计数器和时间线定位成本。",
+    "why": "优化必须从测量开始，而不是从猜测开始。",
+    "prerequisites": [
+      "concept:linux",
+      "concept:computer-architecture"
+    ],
+    "resourceIds": [
+      "topic:linux-profiling"
+    ],
+    "toolIds": [
+      "tool:perf",
+      "tool:vtune"
+    ],
+    "caseIds": [
+      "case:openmp-parallel-reduction"
+    ],
+    "next": [
+      "concept:observability",
+      "concept:gpu-profiling"
+    ],
+    "slug": "profiling"
+  },
+  {
+    "id": "concept:observability",
+    "label": "可观测性",
+    "englishLabel": "Observability",
+    "layer": "systems",
+    "summary": "将日志、指标与 Trace 组成运行证据。",
+    "why": "生产故障需要跨节点、跨层关联，而不是单点截图。",
+    "prerequisites": [
+      "concept:profiling",
+      "concept:networking"
+    ],
+    "resourceIds": [
+      "topic:linux-profiling"
+    ],
+    "toolIds": [
+      "tool:prometheus",
+      "tool:grafana"
+    ],
+    "caseIds": [],
+    "next": [
+      "concept:serving"
+    ],
+    "slug": "observability"
+  },
+  {
+    "id": "concept:parallel-models",
+    "label": "并行计算模型",
+    "englishLabel": "Parallel Models",
+    "layer": "parallel",
+    "summary": "用任务、数据与通信划分并行工作。",
+    "why": "模型决定可扩展性与编程接口。",
+    "prerequisites": [
+      "concept:algorithms",
+      "concept:process",
+      "concept:thread"
+    ],
+    "resourceIds": [
+      "topic:parallel-models"
+    ],
+    "toolIds": [],
+    "caseIds": [
+      "case:openmp-parallel-reduction",
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:performance-model",
+      "concept:collectives",
+      "concept:gpu-architecture"
+    ],
+    "slug": "parallel-models"
+  },
+  {
+    "id": "concept:performance-model",
+    "label": "性能模型",
+    "englishLabel": "Performance Model",
+    "layer": "parallel",
+    "summary": "以计算、内存和通信成本近似真实运行。",
+    "why": "它帮助在昂贵实验前排除无效设计。",
+    "prerequisites": [
+      "concept:parallel-models",
+      "concept:computer-architecture"
+    ],
+    "resourceIds": [
+      "topic:parallel-models",
+      "topic:hpc-performance"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [
+      "concept:roofline",
+      "concept:pipeline-parallel"
+    ],
+    "slug": "performance-model"
+  },
+  {
+    "id": "concept:roofline",
+    "label": "Roofline",
+    "englishLabel": "Roofline",
+    "layer": "parallel",
+    "summary": "用算术强度连接带宽上限与计算上限。",
+    "why": "快速判断优化应该面向访存还是算力。",
+    "prerequisites": [
+      "concept:performance-model",
+      "concept:memory-hierarchy"
+    ],
+    "resourceIds": [
+      "topic:hpc-performance",
+      "topic:gpu-optimization"
+    ],
+    "toolIds": [],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "next": [],
+    "slug": "roofline"
+  },
+  {
+    "id": "concept:shared-memory",
+    "label": "共享内存并行",
+    "englishLabel": "Shared Memory",
+    "layer": "parallel",
+    "summary": "线程通过同一地址空间并发工作。",
+    "why": "它是多核 CPU 并行最直接的模型。",
+    "prerequisites": [
+      "concept:thread",
+      "concept:synchronization"
+    ],
+    "resourceIds": [
+      "topic:openmp-basics"
+    ],
+    "toolIds": [
+      "tool:openmp"
+    ],
+    "caseIds": [
+      "case:openmp-parallel-reduction"
+    ],
+    "next": [
+      "concept:openmp"
+    ],
+    "slug": "shared-memory"
+  },
+  {
+    "id": "concept:openmp",
+    "label": "OpenMP",
+    "englishLabel": "OpenMP",
+    "layer": "parallel",
+    "summary": "用编译指令表达循环、任务与归约并行。",
+    "why": "它降低了从串行 CPU 代码进入并行的门槛。",
+    "prerequisites": [
+      "concept:shared-memory",
+      "concept:compiler"
+    ],
+    "resourceIds": [
+      "topic:openmp-basics"
+    ],
+    "toolIds": [
+      "tool:openmp"
+    ],
+    "caseIds": [
+      "case:openmp-parallel-reduction"
+    ],
+    "next": [],
+    "slug": "openmp"
+  },
+  {
+    "id": "concept:distributed-memory",
+    "label": "分布式内存",
+    "englishLabel": "Distributed Memory",
+    "layer": "parallel",
+    "summary": "进程拥有独立内存并通过消息交换数据。",
+    "why": "多机扩展必须显式面对通信成本。",
+    "prerequisites": [
+      "concept:process",
+      "concept:networking"
+    ],
+    "resourceIds": [
+      "topic:mpi-basics"
+    ],
+    "toolIds": [
+      "tool:mpi",
+      "tool:openmpi",
+      "tool:mpich"
+    ],
+    "caseIds": [
+      "case:mpi-first-message"
+    ],
+    "next": [
+      "concept:mpi"
+    ],
+    "slug": "distributed-memory"
+  },
+  {
+    "id": "concept:mpi",
+    "label": "MPI",
+    "englishLabel": "Message Passing Interface",
+    "layer": "parallel",
+    "summary": "跨进程消息传递的标准接口。",
+    "why": "传统 HPC 程序和大量通信基准都以它为基础。",
+    "prerequisites": [
+      "concept:distributed-memory",
+      "concept:compiler"
+    ],
+    "resourceIds": [
+      "topic:mpi-basics"
+    ],
+    "toolIds": [
+      "tool:mpi",
+      "tool:openmpi",
+      "tool:mpich"
+    ],
+    "caseIds": [
+      "case:mpi-first-message",
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:collectives"
+    ],
+    "slug": "mpi"
+  },
+  {
+    "id": "concept:collectives",
+    "label": "集合通信",
+    "englishLabel": "Collective Communication",
+    "layer": "parallel",
+    "summary": "一组进程共同完成归约、广播、聚集等操作。",
+    "why": "分布式训练的梯度同步直接依赖它。",
+    "prerequisites": [
+      "concept:mpi",
+      "concept:parallel-models"
+    ],
+    "resourceIds": [
+      "topic:mpi-basics",
+      "topic:multi-gpu-collectives"
+    ],
+    "toolIds": [
+      "tool:nccl",
+      "tool:gloo"
+    ],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:nccl",
+      "concept:ddp"
+    ],
+    "slug": "collectives"
+  },
+  {
+    "id": "concept:gpu-architecture",
+    "label": "GPU 架构",
+    "englishLabel": "GPU Architecture",
+    "layer": "parallel",
+    "summary": "大量执行单元通过 SIMT 处理规则数据并行。",
+    "why": "Kernel 布局和访存策略必须匹配硬件。",
+    "prerequisites": [
+      "concept:computer-architecture",
+      "concept:parallel-models"
+    ],
+    "resourceIds": [
+      "topic:cuda-programming",
+      "topic:gpu-memory"
+    ],
+    "toolIds": [
+      "tool:cuda",
+      "tool:rocm"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "next": [
+      "concept:cuda",
+      "concept:kernel",
+      "concept:pytorch"
+    ],
+    "slug": "gpu-architecture"
+  },
+  {
+    "id": "concept:cuda",
+    "label": "CUDA",
+    "englishLabel": "CUDA",
+    "layer": "parallel",
+    "summary": "NVIDIA GPU 的编程平台、运行时和工具链。",
+    "why": "它是当前大量 AI 算子和系统软件的实现基础。",
+    "prerequisites": [
+      "concept:gpu-architecture",
+      "concept:compiler"
+    ],
+    "resourceIds": [
+      "topic:cuda-programming"
+    ],
+    "toolIds": [
+      "tool:cuda",
+      "tool:nvcc"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "next": [
+      "concept:kernel"
+    ],
+    "slug": "cuda"
+  },
+  {
+    "id": "concept:kernel",
+    "label": "GPU Kernel",
+    "englishLabel": "GPU Kernel",
+    "layer": "parallel",
+    "summary": "在设备上由大量线程并行执行的函数。",
+    "why": "算子性能最终落在 Kernel 的执行和数据移动上。",
+    "prerequisites": [
+      "concept:cuda",
+      "concept:gpu-architecture"
+    ],
+    "resourceIds": [
+      "topic:cuda-programming",
+      "topic:gpu-optimization"
+    ],
+    "toolIds": [
+      "tool:cutlass",
+      "tool:triton"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "next": [
+      "concept:gpu-memory",
+      "concept:gpu-profiling",
+      "concept:operator-library"
+    ],
+    "slug": "kernel"
+  },
+  {
+    "id": "concept:gpu-memory",
+    "label": "GPU 内存层次",
+    "englishLabel": "GPU Memory Hierarchy",
+    "layer": "parallel",
+    "summary": "寄存器、共享内存、缓存和显存具有不同作用域与成本。",
+    "why": "它决定占用率、带宽利用率和大量 OOM 行为。",
+    "prerequisites": [
+      "concept:kernel",
+      "concept:memory-hierarchy"
+    ],
+    "resourceIds": [
+      "topic:gpu-memory"
+    ],
+    "toolIds": [
+      "tool:cuda"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "next": [
+      "concept:model-parallelism"
+    ],
+    "slug": "gpu-memory"
+  },
+  {
+    "id": "concept:gpu-profiling",
+    "label": "GPU Profiling",
+    "englishLabel": "GPU Profiling",
+    "layer": "parallel",
+    "summary": "联合时间线与硬件计数器分析设备工作。",
+    "why": "它把 GPU 空闲和低效 Kernel 变成可定位证据。",
+    "prerequisites": [
+      "concept:profiling",
+      "concept:kernel"
+    ],
+    "resourceIds": [
+      "topic:gpu-profiling"
+    ],
+    "toolIds": [
+      "tool:nsight-systems",
+      "tool:nsight-compute"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "next": [],
+    "slug": "gpu-profiling"
+  },
+  {
+    "id": "concept:distributed-systems",
+    "label": "分布式系统",
+    "englishLabel": "Distributed Systems",
+    "layer": "cluster",
+    "summary": "多个不可靠节点协作提供统一行为。",
+    "why": "真实集群必须面对网络、时钟和部分故障。",
+    "prerequisites": [
+      "concept:networking",
+      "concept:process"
+    ],
+    "resourceIds": [
+      "topic:distributed-systems"
+    ],
+    "toolIds": [],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:fault-tolerance",
+      "concept:scheduler",
+      "concept:kubernetes",
+      "concept:distributed-training",
+      "concept:serving"
+    ],
+    "slug": "distributed-systems"
+  },
+  {
+    "id": "concept:fault-tolerance",
+    "label": "容错",
+    "englishLabel": "Fault Tolerance",
+    "layer": "cluster",
+    "summary": "在节点、网络或进程故障后维持或恢复任务。",
+    "why": "长时间训练无法假设所有资源永远可靠。",
+    "prerequisites": [
+      "concept:distributed-systems"
+    ],
+    "resourceIds": [
+      "topic:distributed-systems"
+    ],
+    "toolIds": [],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [],
+    "slug": "fault-tolerance"
+  },
+  {
+    "id": "concept:topology",
+    "label": "拓扑",
+    "englishLabel": "Topology",
+    "layer": "cluster",
+    "summary": "描述 GPU、CPU、交换机与节点之间的连接关系。",
+    "why": "同样的算法在不同拓扑上会产生完全不同的性能。",
+    "prerequisites": [
+      "concept:networking",
+      "concept:computer-architecture"
+    ],
+    "resourceIds": [
+      "topic:multi-gpu-collectives"
+    ],
+    "toolIds": [
+      "tool:nccl"
+    ],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:interconnect",
+      "concept:nccl"
+    ],
+    "slug": "topology"
+  },
+  {
+    "id": "concept:interconnect",
+    "label": "高速互联",
+    "englishLabel": "Interconnect",
+    "layer": "cluster",
+    "summary": "节点内外承载高带宽低延迟数据交换的链路。",
+    "why": "通信密集型任务的扩展上限由它决定。",
+    "prerequisites": [
+      "concept:topology",
+      "concept:networking"
+    ],
+    "resourceIds": [
+      "topic:rdma-interconnect"
+    ],
+    "toolIds": [
+      "tool:ucx",
+      "tool:libfabric"
+    ],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:rdma"
+    ],
+    "slug": "interconnect"
+  },
+  {
+    "id": "concept:rdma",
+    "label": "RDMA",
+    "englishLabel": "Remote Direct Memory Access",
+    "layer": "cluster",
+    "summary": "让远程数据传输减少内核与 CPU 参与。",
+    "why": "它显著改变多节点通信的延迟和 CPU 成本。",
+    "prerequisites": [
+      "concept:interconnect",
+      "concept:memory-model"
+    ],
+    "resourceIds": [
+      "topic:rdma-interconnect"
+    ],
+    "toolIds": [
+      "tool:ucx",
+      "tool:libfabric"
+    ],
+    "caseIds": [],
+    "next": [
+      "concept:infiniband-roce"
+    ],
+    "slug": "rdma"
+  },
+  {
+    "id": "concept:infiniband-roce",
+    "label": "InfiniBand / RoCE",
+    "englishLabel": "InfiniBand / RoCE",
+    "layer": "cluster",
+    "summary": "承载 RDMA 的两类常见网络技术。",
+    "why": "部署与调优要求理解 Fabric、拥塞和无损网络。",
+    "prerequisites": [
+      "concept:rdma",
+      "concept:networking"
+    ],
+    "resourceIds": [
+      "topic:rdma-interconnect"
+    ],
+    "toolIds": [
+      "tool:ucx"
+    ],
+    "caseIds": [],
+    "next": [],
+    "slug": "infiniband-roce"
+  },
+  {
+    "id": "concept:storage",
+    "label": "集群存储",
+    "englishLabel": "Cluster Storage",
+    "layer": "cluster",
+    "summary": "为多节点提供共享或分布式数据访问。",
+    "why": "数据集和检查点的吞吐会影响整体训练效率。",
+    "prerequisites": [
+      "concept:filesystem",
+      "concept:networking"
+    ],
+    "resourceIds": [
+      "topic:filesystem-io"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [],
+    "slug": "storage"
+  },
+  {
+    "id": "concept:scheduler",
+    "label": "调度器",
+    "englishLabel": "Scheduler",
+    "layer": "cluster",
+    "summary": "把任务需求映射到有限的集群资源。",
+    "why": "多 GPU 放置、排队和抢占都由它决定。",
+    "prerequisites": [
+      "concept:distributed-systems",
+      "concept:data-structures"
+    ],
+    "resourceIds": [
+      "topic:cluster-scheduling"
+    ],
+    "toolIds": [
+      "tool:slurm",
+      "tool:kubernetes",
+      "tool:volcano"
+    ],
+    "caseIds": [],
+    "next": [
+      "concept:slurm",
+      "concept:kubernetes"
+    ],
+    "slug": "scheduler"
+  },
+  {
+    "id": "concept:slurm",
+    "label": "Slurm",
+    "englishLabel": "Slurm",
+    "layer": "cluster",
+    "summary": "面向 HPC 批处理和资源管理的调度系统。",
+    "why": "它是大量超算与研究集群的标准入口。",
+    "prerequisites": [
+      "concept:scheduler",
+      "concept:linux"
+    ],
+    "resourceIds": [
+      "topic:cluster-scheduling"
+    ],
+    "toolIds": [
+      "tool:slurm"
+    ],
+    "caseIds": [],
+    "next": [],
+    "slug": "slurm"
+  },
+  {
+    "id": "concept:kubernetes",
+    "label": "Kubernetes",
+    "englishLabel": "Kubernetes",
+    "layer": "cluster",
+    "summary": "通过声明式对象管理容器化工作负载。",
+    "why": "AI 平台常在其上构建训练与推理控制面。",
+    "prerequisites": [
+      "concept:scheduler",
+      "concept:distributed-systems"
+    ],
+    "resourceIds": [
+      "topic:cluster-scheduling"
+    ],
+    "toolIds": [
+      "tool:kubernetes",
+      "tool:volcano"
+    ],
+    "caseIds": [],
+    "next": [],
+    "slug": "kubernetes"
+  },
+  {
+    "id": "concept:pytorch",
+    "label": "PyTorch / JAX",
+    "englishLabel": "AI Frameworks",
+    "layer": "ai-infra",
+    "summary": "用张量、自动微分和设备抽象表达模型计算。",
+    "why": "它是算法代码进入运行时、算子与设备的入口。",
+    "prerequisites": [
+      "concept:python",
+      "concept:gpu-architecture"
+    ],
+    "resourceIds": [
+      "topic:distributed-training"
+    ],
+    "toolIds": [
+      "tool:pytorch",
+      "tool:jax"
+    ],
+    "caseIds": [],
+    "next": [
+      "concept:distributed-training",
+      "concept:inference-engine"
+    ],
+    "slug": "pytorch"
+  },
+  {
+    "id": "concept:operator-library",
+    "label": "算子与加速库",
+    "englishLabel": "Operator Libraries",
+    "layer": "ai-infra",
+    "summary": "提供 GEMM、卷积、Attention 等高性能实现。",
+    "why": "框架性能很大程度取决于是否命中合适算子。",
+    "prerequisites": [
+      "concept:kernel",
+      "concept:compiler"
+    ],
+    "resourceIds": [
+      "topic:inference-engines"
+    ],
+    "toolIds": [
+      "tool:cublas",
+      "tool:cudnn",
+      "tool:cutlass",
+      "tool:onednn"
+    ],
+    "caseIds": [
+      "case:cuda-vector-add"
+    ],
+    "next": [
+      "concept:inference-engine"
+    ],
+    "slug": "operator-library"
+  },
+  {
+    "id": "concept:nccl",
+    "label": "NCCL / Gloo",
+    "englishLabel": "Collective Backends",
+    "layer": "ai-infra",
+    "summary": "为 GPU 或 CPU 进程组提供集合通信后端。",
+    "why": "DDP 的梯度同步最终通过这些后端执行。",
+    "prerequisites": [
+      "concept:collectives",
+      "concept:topology"
+    ],
+    "resourceIds": [
+      "topic:multi-gpu-collectives"
+    ],
+    "toolIds": [
+      "tool:nccl",
+      "tool:gloo"
+    ],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:distributed-training"
+    ],
+    "slug": "nccl"
+  },
+  {
+    "id": "concept:distributed-training",
+    "label": "分布式训练",
+    "englishLabel": "Distributed Training",
+    "layer": "ai-infra",
+    "summary": "让多个设备或节点协作完成模型训练。",
+    "why": "模型规模、训练时间与成本推动它成为核心能力。",
+    "prerequisites": [
+      "concept:pytorch",
+      "concept:nccl",
+      "concept:distributed-systems"
+    ],
+    "resourceIds": [
+      "topic:distributed-training"
+    ],
+    "toolIds": [
+      "tool:pytorch"
+    ],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:ddp",
+      "concept:model-parallelism"
+    ],
+    "slug": "distributed-training"
+  },
+  {
+    "id": "concept:ddp",
+    "label": "数据并行 DDP",
+    "englishLabel": "Distributed Data Parallel",
+    "layer": "ai-infra",
+    "summary": "复制模型、切分数据并同步梯度。",
+    "why": "它是理解现代分布式训练的最小完整闭环。",
+    "prerequisites": [
+      "concept:distributed-training",
+      "concept:collectives"
+    ],
+    "resourceIds": [
+      "topic:distributed-training"
+    ],
+    "toolIds": [
+      "tool:pytorch"
+    ],
+    "caseIds": [
+      "case:ring-allreduce-simulator"
+    ],
+    "next": [
+      "concept:fsdp-zero"
+    ],
+    "slug": "ddp"
+  },
+  {
+    "id": "concept:model-parallelism",
+    "label": "模型并行",
+    "englishLabel": "Model Parallelism",
+    "layer": "ai-infra",
+    "summary": "把模型参数或计算切分到多个设备。",
+    "why": "单卡放不下或吞吐不足时需要更复杂的切分。",
+    "prerequisites": [
+      "concept:distributed-training",
+      "concept:gpu-memory"
+    ],
+    "resourceIds": [
+      "topic:model-parallelism"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [
+      "concept:fsdp-zero",
+      "concept:pipeline-parallel"
+    ],
+    "slug": "model-parallelism"
+  },
+  {
+    "id": "concept:fsdp-zero",
+    "label": "FSDP / ZeRO",
+    "englishLabel": "FSDP / ZeRO",
+    "layer": "ai-infra",
+    "summary": "分片参数、梯度与优化器状态以降低显存。",
+    "why": "它让数据并行扩展到更大的模型。",
+    "prerequisites": [
+      "concept:ddp",
+      "concept:model-parallelism"
+    ],
+    "resourceIds": [
+      "topic:model-parallelism"
+    ],
+    "toolIds": [
+      "tool:pytorch"
+    ],
+    "caseIds": [],
+    "next": [],
+    "slug": "fsdp-zero"
+  },
+  {
+    "id": "concept:pipeline-parallel",
+    "label": "流水线并行",
+    "englishLabel": "Pipeline Parallelism",
+    "layer": "ai-infra",
+    "summary": "按层切分模型并让多个 Micro-batch 流过阶段。",
+    "why": "性能取决于气泡、负载平衡和通信。",
+    "prerequisites": [
+      "concept:model-parallelism",
+      "concept:performance-model"
+    ],
+    "resourceIds": [
+      "topic:model-parallelism"
+    ],
+    "toolIds": [],
+    "caseIds": [],
+    "next": [],
+    "slug": "pipeline-parallel"
+  },
+  {
+    "id": "concept:inference-engine",
+    "label": "推理引擎",
+    "englishLabel": "Inference Engine",
+    "layer": "ai-infra",
+    "summary": "将模型图转换为面向目标设备的高效执行计划。",
+    "why": "生产推理需要联合优化算子、内存与批处理。",
+    "prerequisites": [
+      "concept:pytorch",
+      "concept:operator-library"
+    ],
+    "resourceIds": [
+      "topic:inference-engines"
+    ],
+    "toolIds": [
+      "tool:tensorrt",
+      "tool:vllm",
+      "tool:tensorrt-llm"
+    ],
+    "caseIds": [],
+    "next": [
+      "concept:serving"
+    ],
+    "slug": "inference-engine"
+  },
+  {
+    "id": "concept:serving",
+    "label": "模型服务",
+    "englishLabel": "Model Serving",
+    "layer": "ai-infra",
+    "summary": "将推理执行封装为可伸缩、可观测的在线服务。",
+    "why": "最终用户体验取决于延迟、吞吐和可靠性。",
+    "prerequisites": [
+      "concept:inference-engine",
+      "concept:distributed-systems",
+      "concept:observability"
+    ],
+    "resourceIds": [
+      "topic:inference-engines"
+    ],
+    "toolIds": [
+      "tool:vllm",
+      "tool:kubernetes",
+      "tool:prometheus"
+    ],
+    "caseIds": [],
+    "next": [],
+    "slug": "serving"
+  }
+]

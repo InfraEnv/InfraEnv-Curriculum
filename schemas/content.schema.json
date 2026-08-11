@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://infraenv.dev/schemas/curriculum/content.schema.json",
+  "title": "InfraEnv Curriculum Source Contracts",
+  "$defs": {
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "contentVersion", "defaultLocale", "supportedLocales"],
+      "properties": {
+        "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "contentVersion": { "type": "string", "minLength": 1 },
+        "defaultLocale": { "const": "zh-CN" },
+        "supportedLocales": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["zh-CN", "en"] }
+        }
+      }
+    },
+    "course": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "slug", "title", "englishTitle", "summary", "audience", "chapterIds"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^course:[a-z0-9][a-z0-9-]*$" },
+        "slug": { "$ref": "#/$defs/slug" },
+        "title": { "$ref": "#/$defs/nonEmpty" },
+        "englishTitle": { "$ref": "#/$defs/nonEmpty" },
+        "summary": { "$ref": "#/$defs/nonEmpty" },
+        "audience": { "$ref": "#/$defs/nonEmpty" },
+        "chapterIds": { "$ref": "#/$defs/chapterIds" }
+      }
+    },
+    "chapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "slug", "courseId", "title", "englishTitle", "summary", "lessonIds"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^chapter:[a-z0-9][a-z0-9-]*$" },
+        "slug": { "$ref": "#/$defs/slug" },
+        "courseId": { "type": "string", "pattern": "^course:[a-z0-9][a-z0-9-]*$" },
+        "title": { "$ref": "#/$defs/nonEmpty" },
+        "englishTitle": { "$ref": "#/$defs/nonEmpty" },
+        "summary": { "$ref": "#/$defs/nonEmpty" },
+        "lessonIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^lesson:[a-z0-9][a-z0-9-]*$" }
+        }
+      }
+    },
+    "lesson": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "slug", "chapterId", "title", "englishTitle", "summary", "duration", "bodyAsset", "prerequisiteTopicIds", "teachesConceptIds", "usesToolIds", "labIds"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^lesson:[a-z0-9][a-z0-9-]*$" },
+        "slug": { "$ref": "#/$defs/slug" },
+        "chapterId": { "type": "string", "pattern": "^chapter:[a-z0-9][a-z0-9-]*$" },
+        "title": { "$ref": "#/$defs/nonEmpty" },
+        "englishTitle": { "$ref": "#/$defs/nonEmpty" },
+        "summary": { "$ref": "#/$defs/nonEmpty" },
+        "duration": { "$ref": "#/$defs/nonEmpty" },
+        "bodyAsset": { "type": "string", "pattern": "^mdx/lessons/[A-Za-z0-9.-]+\\.mdx$" },
+        "prerequisiteTopicIds": { "$ref": "#/$defs/topicIds" },
+        "teachesConceptIds": { "$ref": "#/$defs/conceptIds" },
+        "usesToolIds": { "$ref": "#/$defs/toolIds" },
+        "labIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^lab:[a-z0-9][a-z0-9-]*$" }
+        }
+      }
+    },
+    "lab": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "slug", "title", "lessonId", "scenarioRef", "simulationLevel", "requirements", "allowedUiActions", "steps", "validators"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^lab:[a-z0-9][a-z0-9-]*$" },
+        "slug": { "$ref": "#/$defs/slug" },
+        "title": { "$ref": "#/$defs/nonEmpty" },
+        "lessonId": { "type": "string", "pattern": "^lesson:[a-z0-9][a-z0-9-]*$" },
+        "scenarioRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "version"],
+          "properties": {
+            "id": { "type": "string", "pattern": "^scenario:[a-z0-9][a-z0-9-]*$" },
+            "version": { "$ref": "#/$defs/semver" }
+          }
+        },
+        "simulationLevel": { "$ref": "#/$defs/simulationLevel" },
+        "requirements": { "$ref": "#/$defs/runtimeRequirements" },
+        "allowedUiActions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["pause", "resume", "reset", "inject-listed-fault", "clear-listed-fault"] }
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/labStep" }
+        },
+        "validators": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/declarativeValidator" }
+        }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "title", "seed", "minRuntimeVersion", "requiredCapabilities", "simulationLevel", "clock", "cluster", "job", "events", "causalModel"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^scenario:[a-z0-9][a-z0-9-]*$" },
+        "version": { "$ref": "#/$defs/semver" },
+        "title": { "$ref": "#/$defs/nonEmpty" },
+        "seed": { "type": "integer", "minimum": 0 },
+        "minRuntimeVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+        "requiredCapabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "simulationLevel": { "$ref": "#/$defs/simulationLevel" },
+        "clock": { "const": "deterministic-virtual" },
+        "cluster": { "$ref": "#/$defs/cluster" },
+        "job": { "$ref": "#/$defs/job" },
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/scenarioEvent" }
+        },
+        "causalModel": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["from", "to", "relation"],
+            "properties": {
+              "from": { "$ref": "#/$defs/nonEmpty" },
+              "to": { "$ref": "#/$defs/nonEmpty" },
+              "relation": { "$ref": "#/$defs/nonEmpty" }
+            }
+          }
+        }
+      }
+    },
+    "runtimeRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node", "docker", "operatingSystems", "cpuCores", "memoryMiB", "diskMiB", "realGpuRequired", "networkAccessDuringLab"],
+      "properties": {
+        "node": { "const": ">=22" },
+        "docker": { "const": ">=26" },
+        "operatingSystems": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmpty" } },
+        "cpuCores": { "type": "integer", "minimum": 1 },
+        "memoryMiB": { "type": "integer", "minimum": 512 },
+        "diskMiB": { "type": "integer", "minimum": 512 },
+        "realGpuRequired": { "const": false },
+        "networkAccessDuringLab": { "const": false }
+      }
+    },
+    "labStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "order", "kind", "title", "instruction", "expectedObservation", "hint"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^step:[a-z0-9][a-z0-9-]*$" },
+        "order": { "type": "integer", "minimum": 1 },
+        "kind": { "enum": ["command", "observe", "diagnose", "repair", "submit"] },
+        "title": { "$ref": "#/$defs/nonEmpty" },
+        "instruction": { "$ref": "#/$defs/nonEmpty" },
+        "command": { "$ref": "#/$defs/nonEmpty" },
+        "expectedObservation": { "$ref": "#/$defs/nonEmpty" },
+        "hint": { "$ref": "#/$defs/nonEmpty" }
+      }
+    },
+    "declarativeValidator": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "observation"],
+          "properties": {
+            "id": { "$ref": "#/$defs/validatorId" },
+            "kind": { "const": "observation-recorded" },
+            "observation": { "enum": ["metrics.network", "metrics.gpu", "node.inspect"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "target"],
+          "properties": {
+            "id": { "$ref": "#/$defs/validatorId" },
+            "kind": { "const": "target-inspected" },
+            "target": { "$ref": "#/$defs/nonEmpty" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "rootCause", "target"],
+          "properties": {
+            "id": { "$ref": "#/$defs/validatorId" },
+            "kind": { "const": "diagnosis-matches" },
+            "rootCause": { "$ref": "#/$defs/nonEmpty" },
+            "target": { "$ref": "#/$defs/nonEmpty" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "faultId", "state"],
+          "properties": {
+            "id": { "$ref": "#/$defs/validatorId" },
+            "kind": { "const": "fault-state" },
+            "faultId": { "type": "string", "pattern": "^fault:[a-z0-9][a-z0-9-]*$" },
+            "state": { "enum": ["active", "cleared"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "metric", "operator", "value", "unit"],
+          "properties": {
+            "id": { "$ref": "#/$defs/validatorId" },
+            "kind": { "const": "metric-threshold" },
+            "metric": { "$ref": "#/$defs/nonEmpty" },
+            "operator": { "enum": ["gte", "lte"] },
+            "value": { "type": "number" },
+            "unit": { "$ref": "#/$defs/nonEmpty" }
+          }
+        }
+      ]
+    },
+    "cluster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodeCount", "nodeNamePattern", "gpusPerNode", "gpuModel", "totalGpuCount", "baselineNetworkGbps", "topology", "disclosure"],
+      "properties": {
+        "nodeCount": { "type": "integer", "minimum": 1 },
+        "nodeNamePattern": { "$ref": "#/$defs/nonEmpty" },
+        "gpusPerNode": { "type": "integer", "minimum": 1 },
+        "gpuModel": { "$ref": "#/$defs/nonEmpty" },
+        "totalGpuCount": { "type": "integer", "minimum": 1 },
+        "baselineNetworkGbps": { "type": "number", "exclusiveMinimum": 0 },
+        "topology": { "enum": ["fat-tree", "ring", "mesh"] },
+        "disclosure": { "$ref": "#/$defs/nonEmpty" }
+      }
+    },
+    "job": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "framework", "nodeCount", "workersPerNode", "baselineStepTimeMs", "baselineThroughputSamplesPerSecond"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^job:[a-z0-9][a-z0-9-]*$" },
+        "name": { "$ref": "#/$defs/nonEmpty" },
+        "framework": { "$ref": "#/$defs/nonEmpty" },
+        "nodeCount": { "type": "integer", "minimum": 1 },
+        "workersPerNode": { "type": "integer", "minimum": 1 },
+        "baselineStepTimeMs": { "type": "number", "exclusiveMinimum": 0 },
+        "baselineThroughputSamplesPerSecond": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "scenarioEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "atSeconds", "type", "fault"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^event:[a-z0-9][a-z0-9-]*$" },
+        "atSeconds": { "type": "number", "minimum": 0 },
+        "type": { "const": "fault.activate" },
+        "fault": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "kind", "target", "parameters"],
+          "properties": {
+            "id": { "type": "string", "pattern": "^fault:[a-z0-9][a-z0-9-]*$" },
+            "kind": { "const": "network.bandwidth_drop" },
+            "target": { "$ref": "#/$defs/nonEmpty" },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["fromGbps", "toGbps"],
+              "properties": {
+                "fromGbps": { "type": "number", "exclusiveMinimum": 0 },
+                "toGbps": { "type": "number", "exclusiveMinimum": 0 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "semver": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "nonEmpty": { "type": "string", "minLength": 1 },
+    "simulationLevel": { "enum": ["S0", "S1", "S2", "S3", "S4"] },
+    "validatorId": { "type": "string", "pattern": "^validator:[a-z0-9][a-z0-9-]*$" },
+    "chapterIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^chapter:[a-z0-9][a-z0-9-]*$" }
+    },
+    "topicIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^topic:[a-z0-9][a-z0-9-]*$" }
+    },
+    "conceptIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^concept:[a-z0-9][a-z0-9-]*$" }
+    },
+    "toolIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^tool:[a-z0-9][a-z0-9-]*$" }
+    }
+  }
+}
