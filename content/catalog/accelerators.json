@@ -1,0 +1,139 @@
+[
+  {
+    "id": "accelerator:nvidia-a100-pcie-80gb",
+    "version": "1.0.0",
+    "vendor": "NVIDIA",
+    "model": "A100 PCIe 80GB",
+    "architecture": "Ampere",
+    "memory": {
+      "hbmMiB": 81920,
+      "theoreticalBandwidthGBps": 1935,
+      "l2MiB": 40,
+      "sharedMemoryPerSmKiB": 164
+    },
+    "thermalDesignPowerWatts": 300,
+    "nvlink": {
+      "generation": "3",
+      "perAcceleratorBidirectionalGBps": 600
+    },
+    "sourceIds": ["source:nvidia-a100-product", "source:nvidia-cuda-programming-guide"],
+    "fidelity": "exact",
+    "disclosure": "PCIe card profile is distinct from A100 SXM; all runtime telemetry remains SIMULATED / S2."
+  },
+  {
+    "id": "accelerator:nvidia-a100-sxm-80gb",
+    "version": "1.0.0",
+    "vendor": "NVIDIA",
+    "model": "A100 SXM 80GB",
+    "architecture": "Ampere",
+    "memory": {
+      "hbmMiB": 81920,
+      "theoreticalBandwidthGBps": 2039,
+      "l2MiB": 40,
+      "sharedMemoryPerSmKiB": 164
+    },
+    "thermalDesignPowerWatts": 400,
+    "nvlink": {
+      "generation": "3",
+      "perAcceleratorBidirectionalGBps": 600
+    },
+    "sourceIds": ["source:nvidia-a100-product", "source:nvidia-cuda-programming-guide"],
+    "fidelity": "exact",
+    "disclosure": "Published specification snapshot; all runtime telemetry remains SIMULATED / S2."
+  },
+  {
+    "id": "accelerator:nvidia-h100-sxm-80gb",
+    "version": "1.0.0",
+    "vendor": "NVIDIA",
+    "model": "H100 SXM 80GB",
+    "architecture": "Hopper",
+    "memory": {
+      "hbmMiB": 81920,
+      "theoreticalBandwidthGBps": 3350,
+      "l2MiB": 50,
+      "sharedMemoryPerSmKiB": 228
+    },
+    "thermalDesignPowerWatts": 700,
+    "nvlink": {
+      "generation": "4",
+      "perAcceleratorBidirectionalGBps": 900
+    },
+    "sourceIds": ["source:nvidia-dgx-h100-user-guide", "source:nvidia-cuda-programming-guide"],
+    "fidelity": "exact",
+    "disclosure": "Published specification snapshot; all runtime telemetry remains SIMULATED / S2."
+  },
+  {
+    "id": "accelerator:nvidia-h200-sxm-141gb",
+    "version": "1.0.0",
+    "vendor": "NVIDIA",
+    "model": "H200 SXM 141GB",
+    "architecture": "Hopper",
+    "memory": {
+      "hbmMiB": 144384,
+      "theoreticalBandwidthGBps": 4800,
+      "l2MiB": 50,
+      "sharedMemoryPerSmKiB": 228
+    },
+    "thermalDesignPowerWatts": 700,
+    "nvlink": {
+      "generation": "4",
+      "perAcceleratorBidirectionalGBps": 900
+    },
+    "sourceIds": ["source:nvidia-dgx-h100-user-guide", "source:nvidia-cuda-programming-guide"],
+    "fidelity": "exact",
+    "disclosure": "Published specification snapshot; all runtime telemetry remains SIMULATED / S2."
+  },
+  {
+    "id": "accelerator:nvidia-b200-sxm-180gb",
+    "version": "1.0.0",
+    "vendor": "NVIDIA",
+    "model": "B200 SXM 180GB",
+    "architecture": "Blackwell",
+    "memory": {
+      "hbmMiB": 184320,
+      "theoreticalBandwidthGBps": 8000
+    },
+    "thermalDesignPowerWatts": 1000,
+    "nvlink": {
+      "generation": "5",
+      "perAcceleratorBidirectionalGBps": 1800
+    },
+    "sourceIds": ["source:nvidia-dgx-b200-user-guide", "source:nvidia-fabric-manager"],
+    "fidelity": "exact",
+    "disclosure": "Published specification snapshot; unspecified cache details are intentionally omitted. Runtime telemetry is SIMULATED / S2."
+  },
+  {
+    "id": "accelerator:nvidia-gb200-blackwell-192gb",
+    "version": "1.0.0",
+    "vendor": "NVIDIA",
+    "model": "GB200 Blackwell GPU 192GB",
+    "architecture": "Blackwell",
+    "memory": {
+      "hbmMiB": 196608
+    },
+    "nvlink": {
+      "generation": "5",
+      "perAcceleratorBidirectionalGBps": 1800
+    },
+    "sourceIds": ["source:nvidia-gb200-hardware", "source:nvidia-fabric-manager"],
+    "fidelity": "exact",
+    "disclosure": "Published rack-platform specification snapshot; unspecified cache and standalone-card fields are intentionally omitted. Runtime telemetry is SIMULATED / S2."
+  },
+  {
+    "id": "accelerator:nvidia-b300-sxm-288gb",
+    "version": "1.0.0",
+    "vendor": "NVIDIA",
+    "model": "B300 SXM 288GB",
+    "architecture": "Blackwell Ultra",
+    "memory": {
+      "hbmMiB": 294912
+    },
+    "nvlink": {
+      "generation": "5",
+      "perAcceleratorBidirectionalGBps": 1800
+    },
+    "sourceIds": ["source:nvidia-gb300-product", "source:nvidia-fabric-manager"],
+    "fidelity": "exact",
+    "disclosure": "Published specification snapshot; unspecified performance fields are intentionally omitted. Runtime telemetry is SIMULATED / S2."
+  }
+]

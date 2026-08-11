@@ -1,0 +1,31 @@
+[
+  {
+    "id": "boot:gpu-node-standard",
+    "version": "1.0.0",
+    "title": "Generic GPU node boot sequence",
+    "phases": [
+      { "id": "phase:power-and-bmc", "order": 1, "label": "Power and BMC initialization", "virtualDurationMs": 900, "checks": ["bmc-ready", "power-rails-stable"] },
+      { "id": "phase:pcie-enumeration", "order": 2, "label": "PCIe enumeration", "virtualDurationMs": 1100, "checks": ["pcie-roots-present", "accelerators-enumerated"] },
+      { "id": "phase:gpu-self-test", "order": 3, "label": "GPU inventory and simulated self-test", "virtualDurationMs": 1300, "checks": ["gpu-count-matches", "memory-capacity-matches"] },
+      { "id": "phase:fabric-training", "order": 4, "label": "NVLink and network fabric training", "virtualDurationMs": 1500, "checks": ["scale-up-links-ready", "scale-out-links-ready"] },
+      { "id": "phase:scheduler-ready", "order": 5, "label": "Scheduler registration", "virtualDurationMs": 700, "checks": ["node-registered", "health-ready"] }
+    ],
+    "sourceIds": ["source:nvidia-smi", "source:nvidia-fabric-manager"],
+    "disclosure": "SIMULATED BOOT TIME: original strings and deterministic events, not firmware output or a real POST."
+  },
+  {
+    "id": "boot:nvl72-rack",
+    "version": "1.0.0",
+    "title": "NVL72 rack-scale boot sequence",
+    "phases": [
+      { "id": "phase:rack-power-and-bmc", "order": 1, "label": "Power shelves and BMC controllers", "virtualDurationMs": 1200, "checks": ["power-shelves-ready", "management-plane-ready"] },
+      { "id": "phase:nvswitch-trays", "order": 2, "label": "NVSwitch trays and NVOS", "virtualDurationMs": 1700, "checks": ["switch-trays-ready", "nvos-ready"] },
+      { "id": "phase:fabric-manager", "order": 3, "label": "Fabric Manager topology discovery", "virtualDurationMs": 1800, "checks": ["nvlink-domain-discovered", "routes-installed"] },
+      { "id": "phase:compute-trays", "order": 4, "label": "Compute trays and GPU inventory", "virtualDurationMs": 2200, "checks": ["compute-trays-ready", "accelerator-count-matches"] },
+      { "id": "phase:nvlink-validation", "order": 5, "label": "NVLink domain validation", "virtualDurationMs": 1600, "checks": ["nvlink-links-ready", "p2p-reachability-ready"] },
+      { "id": "phase:scale-out-and-scheduler", "order": 6, "label": "Scale-out fabric and scheduler registration", "virtualDurationMs": 1200, "checks": ["scale-out-ready", "scheduler-ready"] }
+    ],
+    "sourceIds": ["source:nvidia-gb200-power-sequence", "source:nvidia-fabric-manager"],
+    "disclosure": "SIMULATED BOOT TIME: compressed, original InfraEnv messages; no NVIDIA firmware or production logs are executed or reproduced."
+  }
+]

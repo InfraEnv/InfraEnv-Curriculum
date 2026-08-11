@@ -1,0 +1,212 @@
+[
+  {
+    "id": "system:a100-pcie-pair",
+    "version": "1.0.0",
+    "name": "NVIDIA A100 PCIe bridge pair",
+    "formFactor": "node",
+    "acceleratorRef": { "id": "accelerator:nvidia-a100-pcie-80gb", "version": "1.0.0" },
+    "structure": {
+      "computeUnitCount": 1,
+      "acceleratorsPerComputeUnit": 2,
+      "switchUnitCount": 0,
+      "switchesPerSwitchUnit": 0,
+      "nvlinkDomainSize": 2,
+      "intraSystemTopology": "nvlink-bridge-pair",
+      "nvlinkLinksPerAccelerator": 12,
+      "nvlinkBridgeAssembliesPerAccelerator": 3
+    },
+    "intraSystemFabricRefs": [
+      { "id": "fabric:pcie-4-x16", "version": "1.0.0" },
+      { "id": "fabric:nvlink-3", "version": "1.0.0" }
+    ],
+    "sourceIds": ["source:nvidia-a100-product", "source:nvidia-a100-pcie-80gb-brief", "source:nvidia-a100-architecture"],
+    "fidelity": "exact",
+    "disclosure": "EXACT published three-bridge pair structure; runtime state and performance are SIMULATED / S2."
+  },
+  {
+    "id": "system:hgx-a100-four",
+    "version": "1.0.0",
+    "name": "NVIDIA HGX A100 four-GPU platform",
+    "formFactor": "chassis",
+    "acceleratorRef": { "id": "accelerator:nvidia-a100-sxm-80gb", "version": "1.0.0" },
+    "structure": {
+      "computeUnitCount": 1,
+      "acceleratorsPerComputeUnit": 4,
+      "switchUnitCount": 0,
+      "switchesPerSwitchUnit": 0,
+      "nvlinkDomainSize": 4,
+      "intraSystemTopology": "nvlink-full-mesh",
+      "nvlinkLinksPerAccelerator": 12
+    },
+    "intraSystemFabricRefs": [
+      { "id": "fabric:nvlink-3", "version": "1.0.0" }
+    ],
+    "sourceIds": ["source:nvidia-a100-product", "source:nvidia-a100-architecture", "source:nvidia-hgx-a100-guide"],
+    "fidelity": "exact",
+    "disclosure": "EXACT published four-GPU fully connected NVLink structure without NVSwitch; runtime values are SIMULATED / S2."
+  },
+  {
+    "id": "system:dgx-hgx-a100-eight",
+    "version": "1.0.0",
+    "name": "NVIDIA DGX A100 single node",
+    "formFactor": "node",
+    "acceleratorRef": { "id": "accelerator:nvidia-a100-sxm-80gb", "version": "1.0.0" },
+    "structure": {
+      "computeUnitCount": 1,
+      "acceleratorsPerComputeUnit": 8,
+      "switchUnitCount": 1,
+      "switchesPerSwitchUnit": 6,
+      "nvlinkDomainSize": 8,
+      "intraSystemTopology": "nvswitch",
+      "nvlinkLinksPerAccelerator": 12
+    },
+    "intraSystemFabricRefs": [
+      { "id": "fabric:nvlink-3", "version": "1.0.0" },
+      { "id": "fabric:nvswitch-2", "version": "1.0.0" }
+    ],
+    "cpuSocketsPerComputeUnit": 2,
+    "sourceIds": ["source:nvidia-dgx-a100-user-guide", "source:nvidia-fabric-manager", "source:nvidia-a100-architecture"],
+    "fidelity": "exact",
+    "disclosure": "EXACT published eight-GPU, six-NVSwitch structure; runtime values are SIMULATED / S2."
+  },
+  {
+    "id": "system:dgx-h100",
+    "version": "1.0.0",
+    "name": "NVIDIA DGX H100",
+    "formFactor": "node",
+    "acceleratorRef": { "id": "accelerator:nvidia-h100-sxm-80gb", "version": "1.0.0" },
+    "structure": {
+      "computeUnitCount": 1,
+      "acceleratorsPerComputeUnit": 8,
+      "switchUnitCount": 1,
+      "switchesPerSwitchUnit": 4,
+      "nvlinkDomainSize": 8,
+      "intraSystemTopology": "nvswitch"
+    },
+    "intraSystemFabricRefs": [
+      { "id": "fabric:nvlink-4", "version": "1.0.0" },
+      { "id": "fabric:nvswitch-3", "version": "1.0.0" }
+    ],
+    "cpuSocketsPerComputeUnit": 2,
+    "hostMemoryMiBPerComputeUnit": 2097152,
+    "sourceIds": ["source:nvidia-dgx-h100-user-guide", "source:nvidia-fabric-manager"],
+    "fidelity": "exact",
+    "disclosure": "Structural profile follows the published DGX platform; emitted state and performance are SIMULATED / S2."
+  },
+  {
+    "id": "system:dgx-h200",
+    "version": "1.0.0",
+    "name": "NVIDIA DGX H200",
+    "formFactor": "node",
+    "acceleratorRef": { "id": "accelerator:nvidia-h200-sxm-141gb", "version": "1.0.0" },
+    "structure": {
+      "computeUnitCount": 1,
+      "acceleratorsPerComputeUnit": 8,
+      "switchUnitCount": 1,
+      "switchesPerSwitchUnit": 4,
+      "nvlinkDomainSize": 8,
+      "intraSystemTopology": "nvswitch"
+    },
+    "intraSystemFabricRefs": [
+      { "id": "fabric:nvlink-4", "version": "1.0.0" },
+      { "id": "fabric:nvswitch-3", "version": "1.0.0" }
+    ],
+    "cpuSocketsPerComputeUnit": 2,
+    "hostMemoryMiBPerComputeUnit": 2097152,
+    "sourceIds": ["source:nvidia-dgx-h100-user-guide", "source:nvidia-fabric-manager"],
+    "fidelity": "exact",
+    "disclosure": "Structural profile follows the published DGX platform; emitted state and performance are SIMULATED / S2."
+  },
+  {
+    "id": "system:dgx-b200",
+    "version": "1.0.0",
+    "name": "NVIDIA DGX B200",
+    "formFactor": "node",
+    "acceleratorRef": { "id": "accelerator:nvidia-b200-sxm-180gb", "version": "1.0.0" },
+    "structure": {
+      "computeUnitCount": 1,
+      "acceleratorsPerComputeUnit": 8,
+      "switchUnitCount": 1,
+      "switchesPerSwitchUnit": 2,
+      "nvlinkDomainSize": 8,
+      "intraSystemTopology": "nvswitch"
+    },
+    "intraSystemFabricRefs": [
+      { "id": "fabric:nvlink-5", "version": "1.0.0" },
+      { "id": "fabric:nvswitch-4", "version": "1.0.0" }
+    ],
+    "cpuSocketsPerComputeUnit": 2,
+    "sourceIds": ["source:nvidia-dgx-b200-user-guide", "source:nvidia-fabric-manager"],
+    "fidelity": "exact",
+    "disclosure": "Structural profile follows the published DGX platform; emitted state and performance are SIMULATED / S2."
+  },
+  {
+    "id": "system:gb200-nvl72",
+    "version": "1.0.0",
+    "name": "NVIDIA GB200 NVL72 rack",
+    "formFactor": "rack",
+    "acceleratorRef": { "id": "accelerator:nvidia-gb200-blackwell-192gb", "version": "1.0.0" },
+    "structure": {
+      "computeUnitCount": 18,
+      "acceleratorsPerComputeUnit": 4,
+      "switchUnitCount": 9,
+      "switchesPerSwitchUnit": 2,
+      "nvlinkDomainSize": 72,
+      "intraSystemTopology": "nvswitch"
+    },
+    "intraSystemFabricRefs": [
+      { "id": "fabric:nvlink-5", "version": "1.0.0" },
+      { "id": "fabric:nvswitch-4", "version": "1.0.0" }
+    ],
+    "cpuSocketsPerComputeUnit": 2,
+    "sourceIds": ["source:nvidia-gb200-hardware", "source:nvidia-fabric-manager"],
+    "fidelity": "exact",
+    "disclosure": "One immutable 72-GPU NVLink domain per published rack; multiple racks remain separate scale-up domains."
+  },
+  {
+    "id": "system:gb300-nvl72",
+    "version": "1.0.0",
+    "name": "NVIDIA GB300 NVL72 rack",
+    "formFactor": "rack",
+    "acceleratorRef": { "id": "accelerator:nvidia-b300-sxm-288gb", "version": "1.0.0" },
+    "structure": {
+      "computeUnitCount": 18,
+      "acceleratorsPerComputeUnit": 4,
+      "switchUnitCount": 9,
+      "switchesPerSwitchUnit": 2,
+      "nvlinkDomainSize": 72,
+      "intraSystemTopology": "nvswitch"
+    },
+    "intraSystemFabricRefs": [
+      { "id": "fabric:nvlink-5", "version": "1.0.0" },
+      { "id": "fabric:nvswitch-4", "version": "1.0.0" }
+    ],
+    "cpuSocketsPerComputeUnit": 2,
+    "sourceIds": ["source:nvidia-gb300-product", "source:nvidia-gb200-hardware", "source:nvidia-gb300-networking", "source:nvidia-fabric-manager"],
+    "fidelity": "exact",
+    "disclosure": "One immutable 72-GPU NVLink domain per published rack; multiple racks remain separate scale-up domains."
+  },
+  {
+    "id": "system:freeform-h100-pcie-four",
+    "version": "1.0.0",
+    "name": "Freeform four-GPU PCIe-only node using an H100 SXM-derived profile",
+    "formFactor": "node",
+    "acceleratorRef": { "id": "accelerator:nvidia-h100-sxm-80gb", "version": "1.0.0" },
+    "structure": {
+      "computeUnitCount": 1,
+      "acceleratorsPerComputeUnit": 4,
+      "switchUnitCount": 0,
+      "switchesPerSwitchUnit": 0,
+      "nvlinkDomainSize": 1,
+      "intraSystemTopology": "pcie-only"
+    },
+    "intraSystemFabricRefs": [
+      { "id": "fabric:pcie-5-x16", "version": "1.0.0" }
+    ],
+    "cpuSocketsPerComputeUnit": 2,
+    "hostMemoryMiBPerComputeUnit": 524288,
+    "sourceIds": ["source:nvidia-dgx-h100-user-guide", "source:pci-sig-pcie5"],
+    "fidelity": "freeform",
+    "disclosure": "USER-COMPOSABLE / SIMULATED: this graph places an H100 SXM-derived fact profile on a PCIe-only fabric; it is not an H100 PCIe card profile, NVIDIA reference platform or physical compatibility claim."
+  }
+]

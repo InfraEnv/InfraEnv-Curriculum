@@ -1,0 +1,146 @@
+[
+  {
+    "id": "source:nvidia-a100-product",
+    "title": "NVIDIA A100 Tensor Core GPU",
+    "publisher": "NVIDIA",
+    "url": "https://www.nvidia.com/en-us/data-center/a100/",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "Public product specifications used for A100 memory and NVLink facts."
+  },
+  {
+    "id": "source:nvidia-a100-pcie-80gb-brief",
+    "title": "NVIDIA A100 80GB PCIe GPU Product Brief",
+    "publisher": "NVIDIA",
+    "url": "https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/PB-10577-001_v02.pdf",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "A100 80GB PCIe two-card topology, three physical NVLink bridge assemblies and 600 GB/s aggregate bridge bandwidth."
+  },
+  {
+    "id": "source:nvidia-a100-architecture",
+    "title": "NVIDIA Ampere Architecture In-Depth",
+    "publisher": "NVIDIA",
+    "url": "https://developer.nvidia.com/blog/nvidia-ampere-architecture-in-depth/",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "A100 implements twelve third-generation NVLink links per accelerator."
+  },
+  {
+    "id": "source:nvidia-hgx-a100-guide",
+    "title": "NVIDIA HGX A100 Software User Guide",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/datacenter/tesla/hgx-software-guide/index.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "HGX A100 four-GPU full NVLink interconnect and eight-GPU NVSwitch platform boundaries."
+  },
+  {
+    "id": "source:nvidia-dgx-h100-user-guide",
+    "title": "NVIDIA DGX H100/H200 User Guide - Introduction",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "DGX H100/H200 accelerator count, NVSwitch count, memory and NVLink platform facts."
+  },
+  {
+    "id": "source:nvidia-dgx-a100-user-guide",
+    "title": "NVIDIA DGX A100 User Guide - Introduction",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/dgx/dgxa100-user-guide/introduction-to-dgxa100.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "DGX A100 eight-GPU and six-NVSwitch platform structure."
+  },
+  {
+    "id": "source:nvidia-dgx-b200-user-guide",
+    "title": "NVIDIA DGX B200 User Guide - Introduction",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/dgx/dgxb200-user-guide/introduction-to-dgxb200.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "DGX B200 accelerator, memory, NVSwitch and aggregate interconnect facts."
+  },
+  {
+    "id": "source:nvidia-gb200-hardware",
+    "title": "NVIDIA DGX GB Rack Scale Systems User Guide - Hardware",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "GB200 and GB300 NVL72 compute-tray, NVSwitch-tray and rack-scale hardware hierarchy."
+  },
+  {
+    "id": "source:nvidia-gb300-product",
+    "title": "NVIDIA GB300 NVL72",
+    "publisher": "NVIDIA",
+    "url": "https://www.nvidia.com/en-gb/data-center/gb300-nvl72/",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "GB300 NVL72 public accelerator memory and rack-scale platform facts."
+  },
+  {
+    "id": "source:nvidia-gb200-superpod",
+    "title": "DGX SuperPOD with GB200 NVL72 - Components",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/dgx-superpod/reference-architecture-scalable-infrastructure-gb200/latest/dgx-superpod-components.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "Eight-rack scalable-unit and NDR400 scale-out reference architecture facts."
+  },
+  {
+    "id": "source:nvidia-gb300-networking",
+    "title": "GB300 NVL72 AI Factory - Network Logical Architecture",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/enterprise-reference-architectures/nvl72-ai-factory/latest/network-logical-architecture.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "Published one-, two-, four- and eight-rack dual-plane network layouts."
+  },
+  {
+    "id": "source:nvidia-fabric-manager",
+    "title": "NVIDIA Fabric Manager User Guide",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/hgx-platforms/fabric-manager-user-guide/index.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "NVLink and NVSwitch generation terminology and fabric-management boundaries."
+  },
+  {
+    "id": "source:nvidia-smi",
+    "title": "NVIDIA System Management Interface Documentation",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/deploy/nvidia-smi/index.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "Topology labels and NVLink data-rate semantics used by the simulated CLI dialect."
+  },
+  {
+    "id": "source:nvidia-cuda-programming-guide",
+    "title": "CUDA Programming Guide - Programming Model",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/cuda/cuda-programming-guide/01-introduction/programming-model.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "Memory-hierarchy terminology, including per-SM shared memory and GPU-wide L2."
+  },
+  {
+    "id": "source:nvidia-gb200-power-sequence",
+    "title": "GB200 NVL72 Rack Power On and Power Off",
+    "publisher": "NVIDIA",
+    "url": "https://docs.nvidia.com/dgx/dgxgb200-user-guide/control-config.html",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "Rack startup ordering used to author the simulated boot profile."
+  },
+  {
+    "id": "source:pci-sig-pcie5",
+    "title": "PCI Express 5.0 Supported Bit Rates",
+    "publisher": "PCI-SIG",
+    "url": "https://pcisig.com/what-bit-rates-does-pcie-50-specification-support-and-how-does-it-compare-prior-pcie-generations",
+    "verifiedAt": "2026-08-11",
+    "sourceType": "official",
+    "note": "PCIe 5.0 line-rate basis; InfraEnv models protocol overhead explicitly."
+  }
+]

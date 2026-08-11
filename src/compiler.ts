@@ -2,7 +2,12 @@
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
-import type { ContentCatalog, ContentManifest } from "./types.js";
+import type {
+  ContentCatalog,
+  ContentManifest,
+  PortableLessonDocument,
+  RuntimeContentProfile,
+} from "./types.js";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -44,11 +49,37 @@ export function withIntegrity(catalog: ContentCatalog, contentRoot: string): Con
   return { ...catalog, manifest };
 }
 
-export function runtimeProfile(catalog: ContentCatalog): Pick<
-  ContentCatalog,
-  "manifest" | "courses" | "chapters" | "lessons" | "labs" | "scenarios"
-> {
-  const { manifest, courses, chapters, lessons, labs, scenarios } = catalog;
-  return { manifest, courses, chapters, lessons, labs, scenarios };
+export function runtimeProfile(
+  catalog: ContentCatalog,
+  lessonDocuments: PortableLessonDocument[] = [],
+): RuntimeContentProfile {
+  const {
+    manifest,
+    sources,
+    accelerators,
+    fabrics,
+    systems,
+    bootProfiles,
+    presets,
+    courses,
+    chapters,
+    lessons,
+    labs,
+    scenarios,
+  } = catalog;
+  return {
+    manifest,
+    sources,
+    accelerators,
+    fabrics,
+    systems,
+    bootProfiles,
+    presets,
+    courses,
+    chapters,
+    lessons,
+    labs,
+    scenarios,
+    lessonDocuments,
+  };
 }
-

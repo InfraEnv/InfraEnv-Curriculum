@@ -1,6 +1,6 @@
 {
   "name": "@infraenv/curriculum",
-  "version": "0.1.0-alpha.0",
+  "version": "0.2.0-alpha.0",
   "description": "Versioned, validated curriculum and simulation scenarios shared by EasyInfra and InfraEnv.",
   "type": "module",
   "license": "(Apache-2.0 AND CC-BY-4.0)",
@@ -29,14 +29,20 @@
       "import": "./dist/manifest.js"
     },
     "./profile/easyinfra": "./dist/profiles/easyinfra/catalog.json",
-    "./profile/runtime": "./dist/profiles/runtime/catalog.json"
+    "./profile/easyinfra/manifest": "./dist/profiles/easyinfra/profile-manifest.json",
+    "./profile/runtime": "./dist/profiles/runtime/catalog.json",
+    "./profile/runtime/manifest": "./dist/profiles/runtime/profile-manifest.json",
+    "./schema/content-v2": "./dist/schemas/content.schema.json",
+    "./schema/runtime-profile-v2": "./dist/schemas/runtime-profile.schema.json",
+    "./schema/content-manifest-v2": "./dist/schemas/content-manifest.schema.json",
+    "./schema/profile-manifest-v2": "./dist/schemas/profile-manifest.schema.json"
   },
   "scripts": {
     "build": "tsx scripts/build.ts && tsc -p tsconfig.json",
     "content:check": "tsx scripts/content-check.ts",
     "lint": "tsc --noEmit -p tsconfig.json",
     "test": "tsx --test tests/*.test.ts",
-    "check": "npm run lint && npm run content:check && npm test && npm run build",
+    "check": "npm run lint && npm run content:check && npm run build && npm test",
     "pack:check": "npm pack --dry-run"
   },
   "dependencies": {
@@ -51,4 +57,3 @@
     "typescript": "5.9.3"
   }
 }
-

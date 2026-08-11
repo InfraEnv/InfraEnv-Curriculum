@@ -5,15 +5,21 @@ import { fileURLToPath } from "node:url";
 import { Ajv2020, type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import { parse as parseYaml } from "yaml";
 import type {
+  AcceleratorProfile,
+  BootProfileDefinition,
   CaseMetadata,
   ChapterDefinition,
+  ClusterPresetDefinition,
+  ComputeSystemProfile,
   ContentCatalog,
   CourseDefinition,
+  FabricProfile,
   LabDefinition,
   LearningTopic,
   LessonDefinition,
   KnowledgeConcept,
   ScenarioDefinition,
+  SourceRecord,
   SoftwareTool,
 } from "./types.js";
 
@@ -52,6 +58,17 @@ function loadValidatedYaml<T>(repositoryRoot: string, path: string, definition: 
   return value as T;
 }
 
+function loadValidatedJsonArray<T>(repositoryRoot: string, path: string, definition: string): T[] {
+  const value = readJson<unknown>(path);
+  const schemaPath = join(repositoryRoot, "schemas", "content.schema.json");
+  const schema = readJson<{ $id: string }>(schemaPath);
+  const ajv = new Ajv2020({ allErrors: true, strict: true });
+  ajv.addSchema(schema);
+  const validate = ajv.compile({ type: "array", items: { $ref: `${schema.$id}#/$defs/${definition}` } });
+  if (!validate(value)) throw new Error(`Schema validation failed:\n${formatAjvErrors(path, validate.errors)}`);
+  return value as T[];
+}
+
 export interface LoadContentOptions {
   repositoryRoot?: string;
 }
@@ -83,14 +100,21 @@ export function loadSourceCatalog(options: LoadContentOptions = {}): ContentCata
     contentVersion: string;
     defaultLocale: "zh-CN";
     supportedLocales: Array<"zh-CN" | "en">;
-  }>(repositoryRoot, join(contentRoot, "manifest.yaml"), "manifest");
+  }>(repositoryRoot, join(contentRoot, "manifest.yaml"), "manifestSource");
+  const catalogRoot = join(contentRoot, "catalog");
 
   return {
     manifest: { ...manifestSource, integrity: {} },
-    topics: readJson<LearningTopic[]>(join(contentRoot, "catalog", "topics.json")),
-    concepts: readJson<KnowledgeConcept[]>(join(contentRoot, "catalog", "concepts.json")),
-    tools: readJson<SoftwareTool[]>(join(contentRoot, "catalog", "tools.json")),
-    cases: readJson<CaseMetadata[]>(join(contentRoot, "catalog", "cases.json")),
+    topics: readJson<LearningTopic[]>(join(catalogRoot, "topics.json")),
+    concepts: readJson<KnowledgeConcept[]>(join(catalogRoot, "concepts.json")),
+    tools: readJson<SoftwareTool[]>(join(catalogRoot, "tools.json")),
+    cases: readJson<CaseMetadata[]>(join(catalogRoot, "cases.json")),
+    sources: loadValidatedJsonArray<SourceRecord>(repositoryRoot, join(catalogRoot, "sources.json"), "sourceRecord"),
+    accelerators: loadValidatedJsonArray<AcceleratorProfile>(repositoryRoot, join(catalogRoot, "accelerators.json"), "acceleratorProfile"),
+    fabrics: loadValidatedJsonArray<FabricProfile>(repositoryRoot, join(catalogRoot, "fabrics.json"), "fabricProfile"),
+    systems: loadValidatedJsonArray<ComputeSystemProfile>(repositoryRoot, join(catalogRoot, "systems.json"), "computeSystemProfile"),
+    bootProfiles: loadValidatedJsonArray<BootProfileDefinition>(repositoryRoot, join(catalogRoot, "boot-profiles.json"), "bootProfile"),
+    presets: loadValidatedJsonArray<ClusterPresetDefinition>(repositoryRoot, join(catalogRoot, "presets.json"), "clusterPreset"),
     courses,
     chapters,
     lessons,

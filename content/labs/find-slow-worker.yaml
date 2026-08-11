@@ -4,7 +4,7 @@ title: Find Slow Worker
 lessonId: lesson:find-slow-worker
 scenarioRef:
   id: scenario:slow-worker-bandwidth-drop
-  version: 1.0.0
+  version: 2.0.0
 simulationLevel: S2
 requirements:
   node: ">=22"
@@ -154,4 +154,3 @@ validators:
     operator: lte
     value: 200
     unit: ms
-

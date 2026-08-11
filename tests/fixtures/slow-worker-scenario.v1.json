@@ -1,0 +1,55 @@
+{
+  "id": "scenario:slow-worker-bandwidth-drop",
+  "version": "1.0.0",
+  "title": "Node03 bandwidth degradation during synchronous training",
+  "seed": 240803,
+  "minRuntimeVersion": "0.1.0-alpha.0",
+  "requiredCapabilities": [
+    "deterministic-clock",
+    "simulated-nvidia-smi",
+    "simulated-slurm",
+    "causal-metrics-v1",
+    "declarative-validator-v1"
+  ],
+  "simulationLevel": "S2",
+  "clock": "deterministic-virtual",
+  "cluster": {
+    "nodeCount": 16,
+    "nodeNamePattern": "node%02d",
+    "gpusPerNode": 8,
+    "gpuModel": "NVIDIA H100 SXM (SIMULATED)",
+    "totalGpuCount": 128,
+    "baselineNetworkGbps": 400,
+    "topology": "fat-tree",
+    "disclosure": "Logical cluster state and metrics are SIMULATED / S2 and are not measurements of real NVIDIA hardware."
+  },
+  "job": {
+    "id": "job:distributed-training-001",
+    "name": "transformer-pretrain",
+    "framework": "PyTorch DDP + NCCL (SIMULATED)",
+    "nodeCount": 16,
+    "workersPerNode": 8,
+    "baselineStepTimeMs": 180,
+    "baselineThroughputSamplesPerSecond": 4551
+  },
+  "events": [
+    {
+      "id": "event:activate-node03-bandwidth-fault",
+      "atSeconds": 40,
+      "type": "fault.activate",
+      "fault": {
+        "id": "fault:node03-bandwidth",
+        "kind": "network.bandwidth_drop",
+        "target": "node03",
+        "parameters": { "fromGbps": 400, "toGbps": 20 }
+      }
+    }
+  ],
+  "causalModel": [
+    { "from": "node03.network.bandwidth_gbps", "to": "worker03.communication_time_ms", "relation": "inverse" },
+    { "from": "worker03.communication_time_ms", "to": "training.synchronization_wait_ms", "relation": "increases" },
+    { "from": "training.synchronization_wait_ms", "to": "cluster.gpu_idle_ratio", "relation": "increases" },
+    { "from": "training.synchronization_wait_ms", "to": "training.step_time_ms", "relation": "increases" },
+    { "from": "training.step_time_ms", "to": "training.throughput_samples_per_second", "relation": "inverse" }
+  ]
+}

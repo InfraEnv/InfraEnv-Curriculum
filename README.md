@@ -1,29 +1,58 @@
 # InfraEnv Curriculum
 
-`@infraenv/curriculum` is the versioned source of truth shared by the EasyInfra learning site and the InfraEnv simulation runtime. It keeps teaching prose, semantic catalogs, executable-looking instructions, scenarios, and declarative completion rules synchronized without allowing curriculum content to execute arbitrary code.
+`@infraenv/curriculum` is the versioned source of truth shared by EasyInfra and the InfraEnv runtime. Version `0.2.0-alpha.0` uses Content Schema `2.0.0`, Node.js 22+, strict TypeScript and ESM.
 
-Version: `0.1.0-alpha.0` · Node.js: `22+` · package format: strict TypeScript / ESM.
+## Repository and license boundary
 
-## Repository boundary
+- Compiler, schemas, adapters, scripts and tests: Apache-2.0.
+- Everything under `content/`: CC BY 4.0.
+- EasyInfra-only positions, icons and colors do not belong here.
 
-- Code, schemas, compiler, scripts, and tests: Apache-2.0.
-- Everything below `content/`, including MDX, scenarios, labs, and educational assets: CC BY 4.0.
-- Presentation overlays such as React Flow positions, icon identifiers, and brand colors belong to EasyInfra and are intentionally absent here.
+The semantic catalog remains backward-compatible at the URL/content level: 27 topics, 57 concepts, 44 tools, five cases and their existing slugs are preserved.
 
-The initial migration preserves all existing EasyInfra semantic material: 27 learning topics, 57 knowledge concepts, 44 software tools, five case records, five complete case MDX files, and their resource links.
+## V2 infrastructure model
 
-## Content model
+Versioned entities use exact `{ id, version }` references. Their effective identity is `id@version`; a logical ID may have multiple immutable versions.
 
-Stable entity IDs use namespaces (`topic:`, `concept:`, `tool:`, `case:`, `course:`, `chapter:`, `lesson:`, `lab:`, `scenario:`). Slugs are separate and may be used in URLs without becoming relationship keys.
+```text
+SourceRecord
+  ├─ AcceleratorProfile
+  ├─ FabricProfile
+  ├─ ComputeSystemProfile
+  └─ BootProfileDefinition
+             ↓
+      ClusterPresetDefinition
+             ↓ exact presetRef
+        ScenarioDefinition
+             ↓ exact scenarioRef
+          LabDefinition
+```
 
-- `content/catalog/*.json` contains the migrated semantic catalog.
-- `content/courses/**.yaml`, `content/labs/*.yaml`, and `content/scenarios/*.yaml` contain structured curriculum and runtime instructions.
-- `content/mdx/` contains prose. MDX allows only `Callout`, `Command`, `LabStep`, `Observation`, `FaultAction`, and `Quiz`; imports, exports, expressions, spreads, and unknown components are rejected.
-- `schemas/content.schema.json` is the Ajv/JSON Schema contract.
+Preset fidelity is explicit:
 
-Lab validators are a closed declarative union. Content cannot provide JavaScript, Python, modules, hooks, shell validators, or lifecycle scripts.
+- `exact`: published structural counts and interconnect boundaries are locked.
+- `derived`: composed from sourced building blocks but not labeled as an official reference layout.
+- `freeform`: user-composable and explicitly marked as not physically validated.
 
-## Consumer snapshots
+All runtime values remain `SIMULATED / S2`. Published theoretical ceilings are kept separate from deterministic modeled efficiency and jitter. NVLink and NVSwitch generations are separate profiles, and shared memory is described per SM rather than as card-wide SRAM.
+
+The built-in catalog includes separate A100 PCIe and SXM profiles; exact A100 PCIe Pair, HGX A100 4-GPU and DGX A100 8-GPU templates; DGX H100/B200; GB200 NVL72 and its eight-rack SuperPOD scalable unit; GB300 one/two/four/eight-rack reference layouts; a derived sixteen-rack GB300 composition; and a clearly marked freeform playground starter.
+
+`Find Slow Worker` is now:
+
+```text
+preset:h100-fat-tree-16x8@1.0.0
+  + scenario:slow-worker-bandwidth-drop@2.0.0
+  + lab:find-slow-worker
+```
+
+The old v1 uniform-cluster Scenario is frozen under `tests/fixtures/` and covered by the pure `adaptScenarioV1` compatibility adapter.
+
+## Safe lesson content
+
+Lesson prose remains restricted MDX. Imports, exports, JavaScript expressions, expression-valued attributes and unknown components are rejected. The build also compiles each lesson into a data-only `PortableLessonDocument` containing a closed union of Markdown blocks and approved course components. Runtime consumers render this JSON without evaluating MDX or curriculum-provided code.
+
+## Deterministic consumer profiles
 
 Run:
 
@@ -32,47 +61,27 @@ npm install
 npm run check
 ```
 
-The deterministic build writes:
+The build writes self-contained profiles:
 
 ```text
-dist/
-├── catalog.json
-├── content-manifest.json
-├── catalog.js / catalog.d.ts
-├── manifest.js / manifest.d.ts
-└── profiles/
-    ├── easyinfra/
-    │   ├── catalog.json
-    │   ├── content-manifest.json
-    │   └── mdx/{cases,lessons}/...
-    └── runtime/
-        ├── catalog.json
-        ├── content-manifest.json
-        └── mdx/lessons/...
+dist/profiles/easyinfra/
+  catalog.json
+  content-manifest.json
+  profile-manifest.json
+  mdx/**
+  contracts/{content.schema.json,content-contract.d.ts}
+  LICENSE-CONTENT / LICENSE-CODE / ATTRIBUTION.md
+
+dist/profiles/runtime/
+  catalog.json
+  content-manifest.json
+  profile-manifest.json
+  mdx/lessons/**
+  lesson-documents/*.json
+  contracts/{content.schema.json,content-contract.d.ts}
+  LICENSE-CONTENT / LICENSE-CODE / ATTRIBUTION.md
 ```
 
-Before an npm release, EasyInfra and InfraEnv copy the appropriate sibling profile into a committed, versioned `DO NOT EDIT` snapshot and verify every entry against `manifest.integrity`. After publication they can pin the exact package version. The full EasyInfra `catalog.json` shape is:
+`content-manifest.json` records every source content checksum. Each profile's `profile-manifest.json` separately records the checksum of every distributed artifact, so a published-package consumer does not need access to the source repository. Both consumer snapshots remain generated `DO NOT EDIT` data.
 
-```ts
-interface ContentCatalog {
-  manifest: ContentManifest;
-  topics: LearningTopic[];
-  concepts: KnowledgeConcept[];
-  tools: SoftwareTool[];
-  cases: CaseMetadata[];
-  courses: CourseDefinition[];
-  chapters: ChapterDefinition[];
-  lessons: LessonDefinition[];
-  labs: LabDefinition[];
-  scenarios: ScenarioDefinition[];
-}
-```
-
-Future package consumers can import `@infraenv/curriculum/catalog`; the pre-release local workflow consumes the JSON and restricted MDX profile directly.
-
-## First lab: Find Slow Worker
-
-The first course is `AI Infrastructure Operations → Distributed Training Diagnostics → Find the Slow Worker`. Its S2 scenario defines 16 logical nodes with eight explicitly simulated H100 GPUs each. At virtual T+40 seconds, `node03` drops from 400 Gbps to 20 Gbps. Structured steps lead the learner through scheduler state, network and GPU evidence, node inspection, diagnosis, repair, and final metric-based validation.
-
-No value in this curriculum is a measurement of real NVIDIA hardware or a claim of real HPC performance.
-
+No hardware profile, boot message, command output or modeled metric is real telemetry, certification, measured performance or evidence of NVIDIA endorsement.
